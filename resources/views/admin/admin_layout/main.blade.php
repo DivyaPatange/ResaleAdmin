@@ -9,8 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
-    <title>Resale | @yield('title')</title>
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}"> -->
+    <title>resale | @yield('title')</title>
     @include('admin.admin_layout.styles')
     @yield('customcss')
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
