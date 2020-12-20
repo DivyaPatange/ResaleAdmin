@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
+use App\Models\Admin\Suggestion;
 
-class SubCategoryController extends Controller
+class SuggestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +18,15 @@ class SubCategoryController extends Controller
     public function index()
     {
         $categories = Category::where('status', 1)->get();
-        $subCategory = SubCategory::all();
-        return view('admin.subCategory.index', compact('categories', 'subCategory'));
+        $suggestions = Suggestion::all();
+        return view('admin.suggestion.index', compact('categories', 'suggestions'));
+    }
+
+    public function getSubCategoryList(Request $request)
+    {
+        $subCategory = SubCategory::where("category_id", $request->category_id)->where('status', 1)
+            ->pluck("sub_category","id");
+            return response()->json($subCategory);
     }
 
     /**
@@ -31,8 +39,6 @@ class SubCategoryController extends Controller
         //
     }
 
-    
-
     /**
      * Store a newly created resource in storage.
      *
@@ -44,14 +50,14 @@ class SubCategoryController extends Controller
         $request->validate([
             'category_name' => 'required',
             'sub_category' => 'required',
-            'status' => 'required',
+            'suggestion' => 'required',
         ]);
-        $subCategory = new SubCategory();
-        $subCategory->category_id = $request->category_name;
-        $subCategory->sub_category =  $request->sub_category;
-        $subCategory->status  = $request->status;
-        $subCategory->save();
-        return redirect('/admin/sub-category')->with('success', 'Sub-Category Added Successfully!');
+        $suggestion = new Suggestion();
+        $suggestion->category_id = $request->category_name;
+        $suggestion->sub_category_id = $request->sub_category;
+        $suggestion->suggestion = $request->suggestion;
+        $suggestion->save();
+        return redirect('/admin/suggestion')->with('success', 'Suggestion Added Successfully!');
     }
 
     /**
@@ -73,9 +79,9 @@ class SubCategoryController extends Controller
      */
     public function edit($id)
     {
-        $subCategory = SubCategory::findorfail($id);
-        $categories = Category::all();
-        return view('admin.subCategory.edit', compact('subCategory', 'categories'));
+        $suggestion = Suggestion::findorfail($id);
+        $categories = Category::where('status', 1)->get();
+        return view('admin.suggestion.edit', compact('suggestion', 'categories'));
     }
 
     /**
@@ -87,17 +93,17 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $subCategory = SubCategory::findorfail($id);
+        $suggestion = Suggestion::findorfail($id);
         $request->validate([
             'category_name' => 'required',
             'sub_category' => 'required',
-            'status' => 'required',
+            'suggestion' => 'required',
         ]);
-        $subCategory->category_id = $request->category_name;
-        $subCategory->sub_category = $request->sub_category;
-        $subCategory->status = $request->status;
-        $subCategory->update($request->all());
-        return redirect('/admin/sub-category')->with('success', 'Sub-Category Updated Successfully!');
+        $suggestion->category_id = $request->category_name;
+        $suggestion->sub_category_id = $request->sub_category;
+        $suggestion->suggestion = $request->suggestion;
+        $suggestion->update($request->all());
+        return redirect('/admin/suggestion')->with('success', 'Suggestion Updated Successfully!');
     }
 
     /**
@@ -108,8 +114,8 @@ class SubCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $subCategory = SubCategory::findorfail($id);
-        $subCategory->delete();
-        return redirect('/admin/sub-category')->with('success', 'Sub-Category Deleted Successfully!');
+        $suggestion = Suggestion::findorfail($id);
+        $suggestion->delete();
+        return redirect('/admin/suggestion')->with('success', 'Suggestion Deleted Successfully!');
     }
 }

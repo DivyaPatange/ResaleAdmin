@@ -17,7 +17,7 @@
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-block mt-3">
                 <button type="button" class="close" data-dismiss="alert">×</button>	
-                    <strong><i class="fa fa-check text-white">&nbsp;</i>{{ $message }}</strong>
+                    <strong>{{ $message }}</strong>
             </div>
             @endif
             @if ($message = Session::get('danger'))

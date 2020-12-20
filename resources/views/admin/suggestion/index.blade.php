@@ -1,6 +1,6 @@
 @extends('admin.admin_layout.main')
-@section('title', 'Sub-Category')
-@section('page_title', 'Sub-Category')
+@section('title', 'Suggestion')
+@section('page_title', 'Suggestion')
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
@@ -31,15 +31,15 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{{ route('admin.sub-category.store') }}">
+                <form class="form-horizontal" method="POST" action="{{ route('admin.suggestion.store') }}">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title">Add Sub-Category</h4>
+                        <h4 class="card-title">Add Suggestion</h4>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group ">
-                                    <label for="fname">Category</label>
-                                    <select class="form-control @error('category_name') is-invalid @enderror" id="fname" name="category_name">
+                                    <label for="category_name">Category</label>
+                                    <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
                                         <option value="">-Select Category-</option>
                                         @foreach($categories as $c)
                                         <option value="{{ $c->id }}">{{ $c->category_name }}</option>
@@ -54,8 +54,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="lname">Sub-Category</label>
-                                    <input type="text" class="form-control @error('sub_category') is-invalid @enderror" id="lname" name="sub_category" value="{{ old('sub_category') }}">
+                                    <label for="sub_category">Sub-Category</label>
+                                    <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
+                                    </select>
                                     @error('sub_category')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -65,13 +66,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="lname">Status</label>
-                                    <select class="form-control @error('status') is-invalid @enderror" id="lname" name="status">
-                                        <option value="">-Select Status-</option>
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                    @error('status')
+                                    <label for="suggestion">Suggestion</label>
+                                    <input type="text" class="form-control @error('suggestion') is-invalid @enderror" id="suggestion" name="suggestion" value="{{ old('suggestion') }}">
+                                    @error('suggestion')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -91,7 +88,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Sub-Category List</h5>
+                    <h5 class="card-title">Suggestion List</h5>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
@@ -99,38 +96,46 @@
                                     <th>Sr. No.</th>
                                     <th>Category Name</th>
                                     <th>Sub Category</th>
-                                    <th>Status</th>
+                                    <th>Suggestion</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($subCategory as $key => $s)
+                            @foreach($suggestions as $key => $s)
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <?php
                                         $category = DB::table('categories')->where('id', $s->category_id)->first();
+                                        if(!empty($category))
+                                        {
+                                            $subCategory = DB::table('sub_categories')->where('id', $s->sub_category_id)->first();
+                                        }
                                     ?>
                                     <td>@if(isset($category) && !empty($category)) {{ $category->category_name }} @endif</td>
-                                    <td>{{ $s->sub_category }}</td>
-                                    <td>@if($s->status == 1) Active @else Inactive @endif</td>
+                                    <td>@if(isset($category) && !empty($category)) 
+                                        @if(isset($subCategory) && !empty($subCategory)){{ $subCategory->sub_category }}
+                                        @endif
+                                        @endif
+                                    </td>
+                                    <td>{{ $s->suggestion }}</td>
                                     <td>
-                                        <a href="{{ route('admin.sub-category.edit', $s->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
+                                        <a href="{{ route('admin.suggestion.edit', $s->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
                                         <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"
                                         ><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-                                        <form action="{{ route('admin.sub-category.destroy', $s->id) }}" method="post">
+                                        <form action="{{ route('admin.suggestion.destroy', $s->id) }}" method="post">
                                         @method('DELETE')
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     </form>
                                     </td>
                                 </tr>
-                                @endforeach
+                            @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Sr. No.</th>
                                     <th>Category Name</th>
                                     <th>Sub Category</th>
-                                    <th>Status</th>
+                                    <th>Suggestion</th>
                                     <th>Action</th>
                                 </tr>
                             </tfoot>
@@ -153,6 +158,33 @@
         *       Basic Table                   *
         ****************************************/
     $('#zero_config').DataTable();
+</script>
+
+<script type=text/javascript>
+  $('#category_name').change(function(){
+  var categoryID = $(this).val();  
+//   alert(categoryID);
+  if(categoryID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('/admin/get-subcategory-list')}}?category_id="+categoryID,
+      success:function(res){        
+      if(res){
+        $("#sub_category").empty();
+        $("#sub_category").append('<option>Select Sub-Category</option>');
+        $.each(res,function(key,value){
+          $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#sub_category").empty();
+      }
+      }
+    });
+  }else{
+    $("#sub_category").empty();
+  }   
+  });
 </script>
 @endsection
 @endsection

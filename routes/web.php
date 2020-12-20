@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     Route::resource('/category', CategoryController::class);
     Route::resource('/sub-category', SubCategoryController::class);
+    Route::resource('/suggestion', SuggestionController::class);
+    Route::get('get-subcategory-list', [SuggestionController::class, 'getSubCategoryList']);
 });
