@@ -56,11 +56,11 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="sub_category">Sub-Category</label>
-                                    <?php
-                                        $subCategory = DB::table('sub_categories')->where('id', $suggestion->sub_category_id)->first();
-                                    ?>
+                                    
                                     <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
-                                        <option value="@if(isset($subCategory) && !empty($subCategory)) {{ $subCategory->id }} @endif" selected>@if(isset($subCategory) && !empty($subCategory)) {{ $subCategory->sub_category }} @endif</option>
+                                        @foreach($subCategories as $s)
+                                        <option value="{{ $s->id }}" {{ ($suggestion->sub_category_id == $s->id) ? 'selected=selected' : '' }}>{{ $s->sub_category }}</option>
+                                        @endforeach
                                     </select>
                                     @error('sub_category')
                                         <span class="invalid-feedback" role="alert">

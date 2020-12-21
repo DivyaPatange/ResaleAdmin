@@ -81,7 +81,8 @@ class SuggestionController extends Controller
     {
         $suggestion = Suggestion::findorfail($id);
         $categories = Category::where('status', 1)->get();
-        return view('admin.suggestion.edit', compact('suggestion', 'categories'));
+        $subCategories = SubCategory::where('category_id', $suggestion->category_id)->where('status', 1)->get();
+        return view('admin.suggestion.edit', compact('suggestion', 'categories', 'subCategories'));
     }
 
     /**
