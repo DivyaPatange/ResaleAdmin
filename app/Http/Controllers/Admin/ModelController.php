@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Admin\ModelName;
 use App\Models\Admin\Brand;
 
-class BrandController extends Controller
+class ModelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,9 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all();
-        return view('admin.brand.index', compact('brands'));
+        $brands = Brand::where('status', 1)->get();
+        $model = ModelName::all();
+        return view('admin.model.index', compact('model', 'brands'));
     }
 
     /**
@@ -39,13 +41,15 @@ class BrandController extends Controller
     {
         $request->validate([
             'brand_name' => 'required',
+            'model_name' => 'required',
             'status' => 'required',
         ]);
-        $brand = new Brand();
-        $brand->brand_name = $request->brand_name;
-        $brand->status = $request->status;
-        $brand->save();
-        return redirect('/admin/brands')->with('success', 'Brand Added Successfully!');
+        $model = new ModelName();
+        $model->brand_id = $request->brand_name;
+        $model->model_name = $request->model_name;
+        $model->status = $request->status;
+        $model->save();
+        return redirect('/admin/model-name')->with('success', 'Model Name Added Successfully!');
     }
 
     /**
@@ -67,8 +71,9 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        $brand = Brand::findorfail($id);
-        return view('admin.brand.edit', compact('brand'));
+        $brands = Brand::where('status', 1)->get();
+        $model = ModelName::findorfail($id);
+        return view('admin.model.edit', compact('model', 'brands'));
     }
 
     /**
@@ -80,15 +85,17 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Brand::findorfail($id);
+        $model = ModelName::findorfail($id);
         $request->validate([
             'brand_name' => 'required',
+            'model_name' => 'required',
             'status' => 'required',
         ]);
-        $brand->brand_name = $request->brand_name;
-        $brand->status = $request->status;
-        $brand->update($request->all());
-        return redirect('/admin/brands')->with('success', 'Brand Updated Successfully!');
+        $model->brand_id = $request->brand_name;
+        $model->model_name = $request->model_name;
+        $model->status = $request->status;
+        $model->update($request->all());
+        return redirect('/admin/model-name')->with('success', 'Model Name Updated Successfully!');
     }
 
     /**
@@ -99,8 +106,8 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Brand::findorfail($id);
-        $brand->delete();
-        return redirect('/admin/brands')->with('success', 'Brand Deleted Successfully!');
+        $model = ModelName::findorfail($id);
+        $model->delete();
+        return redirect('/admin/model-name')->with('success', 'Model Name Deleted Successfully!');
     }
 }

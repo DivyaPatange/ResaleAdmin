@@ -42,12 +42,21 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category_icon' => 'required|dimensions:max_width=32|image|mimes:png',
             'category_name' => 'required',
             'status' => 'required',
         ]);
         $category = new Category();
         $category->category_name = $request->category_name;
         $category->status = $request->status;
+        $image = $request->file('category_icon');
+        // dd($request->file('photo'));
+        if($image != '')
+        {
+            $image_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('categoryIcon'), $image_name);
+        }
+        $category->category_icon =$image_name;
         $category->save();
         return redirect('/admin/category')->with('success', 'Category Added Successfully!');
     }
@@ -85,13 +94,27 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::findorfail($id);
-        $request->validate([
-            'category_name' => 'required',
-            'status' => 'required',
-        ]);
-        $category->category_name = $request->category_name;
-        $category->status = $request->status;
-        $category->update($request->all());
+        
+        $image_name = $request->hidden_image;
+        $image = $request->file('category_icon');
+        if($image != '')
+        {
+            $request->validate([
+                'category_name' => 'required',
+                'status' => 'required',
+                'category_icon' => 'required|dimensions:max_width=32|image|mimes:png',
+            ]);   
+            $image_name = rand() . '.' . $image->getClientOriginalExtension();
+            // $image->storeAs('public/tempcourseimg',$image_name);
+            $image->move(public_path('categoryIcon'), $image_name);
+        }
+        else{
+            $request->validate([
+                'category_name' => 'required',
+                'status' => 'required',
+            ]);   
+        }
+        $category->update(['category_name' => $request->category_name, 'status' => $request->status, 'category_icon' => $image_name]);
         return redirect('/admin/category')->with('success', 'Category Updated Successfully!');
     }
 
@@ -104,6 +127,9 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findorfail($id);
+        if($category->category_icon){
+            unlink(public_path('categoryIcon/'.$category->category_icon));
+        }
         $category->delete();
         return redirect('/admin/category')->with('success', 'Category Deleted Successfully!');
     }

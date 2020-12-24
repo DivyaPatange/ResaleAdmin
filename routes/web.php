@@ -6,6 +6,10 @@ use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\SuggestionController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\TypeController;
+use App\Http\Controllers\Admin\ModelController;
+use App\Http\Controllers\Admin\CategoryFormFieldController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +38,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('/sub-category', SubCategoryController::class);
     Route::resource('/suggestion', SuggestionController::class);
     Route::get('get-subcategory-list', [SuggestionController::class, 'getSubCategoryList']);
+    Route::resource('/brands', BrandController::class);
+    Route::resource('/types', TypeController::class);
+    Route::resource('/model-name', ModelController::class);
+    Route::get('form-field', [CategoryFormFieldController::class, 'index'])->name('category.createField');
 });

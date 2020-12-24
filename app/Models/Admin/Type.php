@@ -5,11 +5,11 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Type extends Model
 {
     use HasFactory;
 
-    protected $table = "categories";
+    protected $table = "types";
 
-    protected $fillable = ['category_name', 'status', 'category_icon'];
+    protected $fillable = ['type_name', 'status'];
 }

@@ -1,6 +1,6 @@
 @extends('admin.admin_layout.main')
-@section('title', 'Category')
-@section('page_title', 'Category')
+@section('title', 'Model')
+@section('page_title', 'Model')
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
@@ -15,55 +15,49 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{{ route('admin.category.update', $category->id) }}" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="{{ route('admin.model-name.update', $model->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
-                        <h4 class="card-title">Edit Category</h4>
+                        <h4 class="card-title">Edit Model</h4>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group ">
-                                    <label for="fname">Category Name</label>
-                                    <input type="text" class="form-control @error('category_name') is-invalid @enderror" id="fname" placeholder="Category Name" name="category_name" value="{{ $category->category_name }}">
-                                    @error('category_name')
+                                    <label for="name">Brand Name</label>
+                                    <select class="form-control @error('brand_name') is-invalid @enderror" id="name" name="brand_name">
+                                        <option value="">-Select Brand-</option>
+                                        @foreach($brands as $b)
+                                        <option value="{{ $b->id }}" {{ ($model->brand_id == $b->id) ? 'selected=selected' : '' }}>{{ $b->brand_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('brand_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label for="fname">Model Name</label>
+                                    <input type="text" class="form-control @error('model_name') is-invalid @enderror" id="fname" placeholder="Model Name" name="model_name" value="{{ $model->model_name }}">
+                                    @error('model_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="lname">Status</label>
                                     <select type="text" class="form-control @error('status') is-invalid @enderror" id="lname" name="status">
                                         <option value="">-Select Status-</option>
-                                        <option value="1" {{ ($category->status == 1) ? 'selected=selected' : '' }}>Active</option>
-                                        <option value="0" {{ ($category->status == 0) ? 'selected=selected' : '' }}>Inactive</option>
+                                        <option value="1" {{ ($model->status == 1) ? 'selected=selected' : '' }}>Active</option>
+                                        <option value="0" {{ ($model->status == 0) ? 'selected=selected' : '' }}>Inactive</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group ">
-                                    <label for="category_icon">Category Icon</label>
-                                    <input type="file" class="form-control @error('category_icon') is-invalid @enderror" id="category_icon" name="category_icon">
-                                    @error('category_icon')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            @if($category->category_icon)
-                            <input type="hidden" class="form-control-file" name="hidden_image" value="{{ $category->category_icon }}">
-                            @endif
-                            @if($category->category_icon)
-                            <div class="col-md-3">
-                                <label for=""></label>
-                                <div class="form-group">
-                                <img src="{{  URL::asset('categoryIcon/' . $category->category_icon) }}" alt="">
-                                </div>
-                            </div>
-                            @endif
                         </div>
                     </div>
                     <div class="border-top">

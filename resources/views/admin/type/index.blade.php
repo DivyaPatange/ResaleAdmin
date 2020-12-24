@@ -1,6 +1,6 @@
 @extends('admin.admin_layout.main')
-@section('title', 'Category')
-@section('page_title', 'Category')
+@section('title', 'Type')
+@section('page_title', 'Type')
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
@@ -31,23 +31,23 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{{ route('admin.category.store') }}" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="{{ route('admin.types.store') }}">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title">Add Category</h4>
+                        <h4 class="card-title">Add Type</h4>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group ">
-                                    <label for="fname">Category Name</label>
-                                    <input type="text" class="form-control @error('category_name') is-invalid @enderror" id="fname" placeholder="Category Name" name="category_name" value="{{ old('category_name') }}">
-                                    @error('category_name')
+                                    <label for="fname">Type Name</label>
+                                    <input type="text" class="form-control @error('type_name') is-invalid @enderror" id="fname" placeholder="Type Name" name="type_name" value="{{ old('type_name') }}">
+                                    @error('type_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="lname">Status</label>
                                     <select type="text" class="form-control @error('status') is-invalid @enderror" id="lname" name="status">
@@ -56,17 +56,6 @@
                                         <option value="0">Inactive</option>
                                     </select>
                                     @error('status')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group ">
-                                    <label for="category_icon">Category Icon</label>
-                                    <input type="file" class="form-control @error('category_icon') is-invalid @enderror" id="category_icon" name="category_icon">
-                                    @error('category_icon')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -86,30 +75,28 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Category List</h5>
+                    <h5 class="card-title">Type List</h5>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Icon</th>
-                                    <th>Category Name</th>
+                                    <th>Type Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($categories as $key => $c)
+                                @foreach($types as $key => $p)
                                 <tr>
                                     <td>{{ ++$key }}</td>
-                                    <td><img src="{{  URL::asset('categoryIcon/' . $c->category_icon) }}" alt=""></td>
-                                    <td>{{ $c->category_name }}</td>
-                                    <td>@if($c->status == 1) Active @else Inactive @endif</td>
+                                    <td>{{ $p->type_name }}</td>
+                                    <td>@if($p->status == 1) Active @else Inactive @endif</td>
                                     <td>
-                                        <a href="{{ route('admin.category.edit', $c->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
+                                        <a href="{{ route('admin.types.edit', $p->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
                                         <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"
                                         ><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-                                        <form action="{{ route('admin.category.destroy', $c->id) }}" method="post">
+                                        <form action="{{ route('admin.types.destroy', $p->id) }}" method="post">
                                         @method('DELETE')
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     </form>
@@ -120,8 +107,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Icon</th>
-                                    <th>Category Name</th>
+                                    <th>Type Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
