@@ -31,7 +31,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{{ route('admin.sub-category.store') }}">
+                <form class="form-horizontal" method="POST" action="{{ route('admin.createField.store') }}">
                     @csrf
                     <div class="card-body">
                         <h4 class="card-title">Add Form Field</h4>
@@ -39,7 +39,7 @@
                             <div class="col-md-4">
                                 <div class="form-group ">
                                     <label for="fname">Category</label>
-                                    <select class="form-control @error('category_name') is-invalid @enderror" id="fname" name="category_name">
+                                    <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
                                         <option value="">-Select Category-</option>
                                         @foreach($categories as $c)
                                         <option value="{{ $c->id }}">{{ $c->category_name }}</option>
@@ -55,7 +55,8 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="lname">Sub-Category</label>
-                                    <input type="text" class="form-control @error('sub_category') is-invalid @enderror" id="lname" name="sub_category" value="{{ old('sub_category') }}">
+                                    <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
+                                    </select>
                                     @error('sub_category')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -86,6 +87,32 @@
         *       Basic Table                   *
         ****************************************/
     $('#zero_config').DataTable();
+</script>
+<script type=text/javascript>
+  $('#category_name').change(function(){
+  var categoryID = $(this).val();  
+//   alert(categoryID);
+  if(categoryID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('/admin/get-subcategory-list')}}?category_id="+categoryID,
+      success:function(res){        
+      if(res){
+        $("#sub_category").empty();
+        $("#sub_category").append('<option>Select Sub-Category</option>');
+        $.each(res,function(key,value){
+          $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#sub_category").empty();
+      }
+      }
+    });
+  }else{
+    $("#sub_category").empty();
+  }   
+  });
 </script>
 @endsection
 @endsection

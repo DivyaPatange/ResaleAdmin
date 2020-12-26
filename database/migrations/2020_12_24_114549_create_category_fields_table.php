@@ -18,7 +18,7 @@ class CreateCategoryFieldsTable extends Migration
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->unsignedInteger('sub_category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('sub_category_id')->references('id')->on('sub-categories');
             $table->timestamps();
         });
     }
