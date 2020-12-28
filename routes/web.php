@@ -43,4 +43,5 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('/model-name', ModelController::class);
     Route::get('/form-field', [CategoryFormFieldController::class, 'index'])->name('category.createField');
     Route::post('/store-form-field', [CategoryFormFieldController::class, 'store'])->name('createField.store');
+    Route::get('get-brand-list', [ModelController::class, 'getBrandList']);
 });

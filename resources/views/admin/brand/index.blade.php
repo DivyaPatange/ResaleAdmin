@@ -38,6 +38,34 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group ">
+                                    <label for="category_name">Category</label>
+                                    <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
+                                        <option value="">-Select Category-</option>
+                                        @foreach($categories as $c)
+                                        <option value="{{ $c->id }}">{{ $c->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="sub_category">Sub-Category</label>
+                                    <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
+                                    </select>
+                                    @error('sub_category')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group ">
                                     <label for="fname">Brand Name</label>
                                     <input type="text" class="form-control @error('brand_name') is-invalid @enderror" id="fname" placeholder="Brand Name" name="brand_name" value="{{ old('brand_name') }}">
                                     @error('brand_name')
@@ -81,6 +109,8 @@
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
+                                    <th>Category</th>
+                                    <th>Sub-Category</th>
                                     <th>Brand Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -90,6 +120,12 @@
                                 @foreach($brands as $key => $b)
                                 <tr>
                                     <td>{{ ++$key }}</td>
+                                    <?php
+                                        $category = DB::table('categories')->where('id', $b->category_id)->first();
+                                        $subCategory = DB::table('sub_categories')->where('id', $b->sub_category_id)->first();
+                                    ?>
+                                    <td>@if(isset($category) && !empty($category)) {{ $category->category_name }} @endif</td>
+                                    <td>@if(isset($subCategory) && !empty($subCategory)) {{ $subCategory->sub_category }} @endif</td>
                                     <td>{{ $b->brand_name }}</td>
                                     <td>@if($b->status == 1) Active @else Inactive @endif</td>
                                     <td>
@@ -107,6 +143,8 @@
                             <tfoot>
                                 <tr>
                                     <th>Sr. No.</th>
+                                    <th>Category</th>
+                                    <th>Sub-Category</th>
                                     <th>Brand Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -131,6 +169,32 @@
         *       Basic Table                   *
         ****************************************/
     $('#zero_config').DataTable();
+</script>
+<script type=text/javascript>
+  $('#category_name').change(function(){
+  var categoryID = $(this).val();  
+//   alert(categoryID);
+  if(categoryID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('/admin/get-subcategory-list')}}?category_id="+categoryID,
+      success:function(res){        
+      if(res){
+        $("#sub_category").empty();
+        $("#sub_category").append('<option>Select Sub-Category</option>');
+        $.each(res,function(key,value){
+          $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#sub_category").empty();
+      }
+      }
+    });
+  }else{
+    $("#sub_category").empty();
+  }   
+  });
 </script>
 @endsection
 @endsection

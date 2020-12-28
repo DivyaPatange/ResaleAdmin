@@ -11,5 +11,5 @@ class Type extends Model
 
     protected $table = "types";
 
-    protected $fillable = ['type_name', 'status'];
+    protected $fillable = ['type_name', 'status', 'category_id', 'sub_category_id'];
 }

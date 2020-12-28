@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Brand;
+use App\Models\Admin\Category;
+use App\Models\Admin\SubCategory;
 
 class BrandController extends Controller
 {
@@ -15,8 +17,9 @@ class BrandController extends Controller
      */
     public function index()
     {
+        $categories = Category::where('status', 1)->get();
         $brands = Brand::all();
-        return view('admin.brand.index', compact('brands'));
+        return view('admin.brand.index', compact('brands', 'categories'));
     }
 
     /**
@@ -40,10 +43,14 @@ class BrandController extends Controller
         $request->validate([
             'brand_name' => 'required',
             'status' => 'required',
+            'category_name' => 'required',
+            'sub_category' => 'required',
         ]);
         $brand = new Brand();
         $brand->brand_name = $request->brand_name;
         $brand->status = $request->status;
+        $brand->category_id = $request->category_name;
+        $brand->sub_category_id = $request->sub_category;
         $brand->save();
         return redirect('/admin/brands')->with('success', 'Brand Added Successfully!');
     }
@@ -68,7 +75,9 @@ class BrandController extends Controller
     public function edit($id)
     {
         $brand = Brand::findorfail($id);
-        return view('admin.brand.edit', compact('brand'));
+        $categories = Category::where('status', 1)->get();
+        $subCategories = SubCategory::where('category_id', $brand->category_id)->where('status', 1)->get();
+        return view('admin.brand.edit', compact('brand', 'categories', 'subCategories'));
     }
 
     /**
@@ -84,7 +93,11 @@ class BrandController extends Controller
         $request->validate([
             'brand_name' => 'required',
             'status' => 'required',
+            'category_name' => 'required',
+            'sub_category' => 'required',
         ]);
+        $brand->category_id = $request->category_name;
+        $brand->sub_category_id = $request->sub_category;
         $brand->brand_name = $request->brand_name;
         $brand->status = $request->status;
         $brand->update($request->all());

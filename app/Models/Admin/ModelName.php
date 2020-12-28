@@ -11,5 +11,5 @@ class ModelName extends Model
 
     protected $table = "models";
 
-    protected $fillable = ['brand_id', 'model_name', 'status'];
+    protected $fillable = ['brand_id', 'model_name', 'status', 'category_id', 'sub_category_id'];
 }

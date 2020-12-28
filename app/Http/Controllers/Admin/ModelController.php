@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\ModelName;
 use App\Models\Admin\Brand;
+use App\Models\Admin\Category;
+use App\Models\Admin\SubCategory;
 
 class ModelController extends Controller
 {
@@ -16,9 +18,10 @@ class ModelController extends Controller
      */
     public function index()
     {
+        $categories = Category::where('status', 1)->get();
         $brands = Brand::where('status', 1)->get();
         $model = ModelName::all();
-        return view('admin.model.index', compact('model', 'brands'));
+        return view('admin.model.index', compact('model', 'brands', 'categories'));
     }
 
     /**
@@ -31,6 +34,13 @@ class ModelController extends Controller
         //
     }
 
+    public function getBrandList(Request $request)
+    {
+        $brand = Brand::where("sub_category_id", $request->brand_id)->where('status', 1)
+            ->pluck("brand_name","id");
+            return response()->json($brand);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -40,11 +50,15 @@ class ModelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category_name' => 'required',
+            'sub_category' => 'required',
             'brand_name' => 'required',
             'model_name' => 'required',
             'status' => 'required',
         ]);
         $model = new ModelName();
+        $model->category_id = $request->category_name;
+        $model->sub_category_id = $request->sub_category;
         $model->brand_id = $request->brand_name;
         $model->model_name = $request->model_name;
         $model->status = $request->status;
@@ -73,7 +87,9 @@ class ModelController extends Controller
     {
         $brands = Brand::where('status', 1)->get();
         $model = ModelName::findorfail($id);
-        return view('admin.model.edit', compact('model', 'brands'));
+        $categories = Category::where('status', 1)->get();
+        $subCategories = SubCategory::where('category_id', $model->category_id)->where('status', 1)->get();
+        return view('admin.model.edit', compact('model', 'brands', 'categories', 'subCategories'));
     }
 
     /**
@@ -87,10 +103,14 @@ class ModelController extends Controller
     {
         $model = ModelName::findorfail($id);
         $request->validate([
+            'category_name' => 'required',
+            'sub_category' => 'required',
             'brand_name' => 'required',
             'model_name' => 'required',
             'status' => 'required',
         ]);
+        $model->category_id = $request->category_name;
+        $model->sub_category_id = $request->sub_category;
         $model->brand_id = $request->brand_name;
         $model->model_name = $request->model_name;
         $model->status = $request->status;

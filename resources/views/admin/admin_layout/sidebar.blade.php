@@ -13,7 +13,7 @@
                 <li class="sidebar-item"><a href="{{ route('admin.types.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Type </span></a></li>
             </ul>
         </li>
-        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.category.createField') }}" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">Add Form Field</span></a></li>
+        <!-- <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.category.createField') }}" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">Add Form Field</span></a></li> -->
         <!-- <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">Icons </span></a>
             <ul aria-expanded="false" class="collapse  first-level">
                 <li class="sidebar-item"><a href="icon-material.html" class="sidebar-link"><i class="mdi mdi-emoticon"></i><span class="hide-menu"> Material Icons </span></a></li>

@@ -23,6 +23,38 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group ">
+                                    <label for="category_name">Category</label>
+                                    <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
+                                        <option value="">-Select Category-</option>
+                                        @foreach($categories as $c)
+                                        <option value="{{ $c->id }}" {{ ($model->category_id == $c->id) ? 'selected=selected' : '' }}>{{ $c->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="sub_category">Sub-Category</label>
+                                    
+                                    <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
+                                        @foreach($subCategories as $s)
+                                        <option value="{{ $s->id }}" {{ ($model->sub_category_id == $s->id) ? 'selected=selected' : '' }}>{{ $s->sub_category }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('sub_category')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
                                     <label for="name">Brand Name</label>
                                     <select class="form-control @error('brand_name') is-invalid @enderror" id="name" name="brand_name">
                                         <option value="">-Select Brand-</option>
@@ -81,6 +113,32 @@
         *       Basic Table                   *
         ****************************************/
     $('#zero_config').DataTable();
+</script>
+<script type=text/javascript>
+  $('#category_name').change(function(){
+  var categoryID = $(this).val();  
+//   alert(categoryID);
+  if(categoryID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('/admin/get-subcategory-list')}}?category_id="+categoryID,
+      success:function(res){        
+      if(res){
+        $("#sub_category").empty();
+        $("#sub_category").append('<option>Select Sub-Category</option>');
+        $.each(res,function(key,value){
+          $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#sub_category").empty();
+      }
+      }
+    });
+  }else{
+    $("#sub_category").empty();
+  }   
+  });
 </script>
 @endsection
 @endsection

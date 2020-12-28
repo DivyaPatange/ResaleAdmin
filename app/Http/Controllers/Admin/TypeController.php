@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Type;
+use App\Models\Admin\Category;
+use App\Models\Admin\SubCategory;
 
 class TypeController extends Controller
 {
@@ -15,8 +17,9 @@ class TypeController extends Controller
      */
     public function index()
     {
+        $categories = Category::where('status', 1)->get();
         $types = Type::all();
-        return view('admin.type.index', compact('types'));
+        return view('admin.type.index', compact('types', 'categories'));
     }
 
     /**
@@ -38,10 +41,14 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category_name' => 'required',
+            'sub_category' => 'required',
             'type_name' => 'required',
             'status' => 'required',
         ]);
         $type = new Type();
+        $type->category_id = $request->category_name;
+        $type->sub_category_id = $request->sub_category;
         $type->type_name = $request->type_name;
         $type->status = $request->status;
         $type->save();
@@ -67,8 +74,10 @@ class TypeController extends Controller
      */
     public function edit($id)
     {
+        $categories = Category::where('status', 1)->get();
         $type = Type::findorfail($id);
-        return view('admin.type.edit', compact('type'));
+        $subCategories = SubCategory::where('category_id', $type->category_id)->where('status', 1)->get();
+        return view('admin.type.edit', compact('type', 'categories', 'subCategories'));
     }
 
     /**
@@ -82,9 +91,13 @@ class TypeController extends Controller
     {
         $type = Type::findorfail($id);
         $request->validate([
+            'category_name' => 'required',
+            'sub_category' => 'required',
             'type_name' => 'required',
             'status' => 'required',
         ]);
+        $type->category_id = $request->category_name;
+        $type->sub_category_id = $request->sub_category;
         $type->type_name = $request->type_name;
         $type->status = $request->status;
         $type->update($request->all());
