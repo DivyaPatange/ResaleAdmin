@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\Admin\ModelController;
 use App\Http\Controllers\Admin\CategoryFormFieldController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +46,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/form-field', [CategoryFormFieldController::class, 'index'])->name('category.createField');
     Route::post('/store-form-field', [CategoryFormFieldController::class, 'store'])->name('createField.store');
     Route::get('get-brand-list', [ModelController::class, 'getBrandList']);
+    Route::resource('/states', StateController::class);
+    Route::resource('/city', CityController::class);
 });
