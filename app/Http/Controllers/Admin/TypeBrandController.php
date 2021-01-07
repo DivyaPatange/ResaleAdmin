@@ -71,8 +71,9 @@ class TypeBrandController extends Controller
      */
     public function edit($id)
     {
+        $types = Type::where('status', 1)->get();
         $typeBrand = TypeBrand::findorfail($id);
-        return view('admin.typeBrand.edit', compact('typeBrand'));
+        return view('admin.typeBrand.edit', compact('typeBrand', 'types'));
     }
 
     /**
@@ -94,6 +95,7 @@ class TypeBrandController extends Controller
         $typeBrand->type_brand_name = $request->brand_name;
         $typeBrand->status = $request->status;
         $typeBrand->update($request->all());
+        return redirect('/admin/type-brand')->with('success', 'Brand Updated Successfully!');
     }
 
     /**
