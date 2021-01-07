@@ -11,6 +11,7 @@
                 <li class="sidebar-item"><a href="{{ route('admin.brands.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Brand Name </span></a></li>
                 <li class="sidebar-item"><a href="{{ route('admin.model-name.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Model Name </span></a></li>
                 <li class="sidebar-item"><a href="{{ route('admin.types.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Type </span></a></li>
+                <li class="sidebar-item"><a href="{{ route('admin.type-brand.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Type Brand </span></a></li>
                 <li class="sidebar-item"><a href="{{ route('admin.states.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> State </span></a></li>
                 <li class="sidebar-item"><a href="{{ route('admin.city.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> City </span></a></li>
             </ul>

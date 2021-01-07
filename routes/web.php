@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ModelController;
 use App\Http\Controllers\Admin\CategoryFormFieldController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\TypeBrandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +49,5 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('get-brand-list', [ModelController::class, 'getBrandList']);
     Route::resource('/states', StateController::class);
     Route::resource('/city', CityController::class);
+    Route::resource('/type-brand', TypeBrandController::class);
 });
