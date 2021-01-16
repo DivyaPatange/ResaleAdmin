@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
+    <!--<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">-->
     <title>resale</title>
     <!-- Custom CSS -->
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
@@ -59,7 +59,7 @@
                 <div id="loginform">
                     <div class="text-center p-t-20 p-b-20">
                         <span class="db">
-                            <h2>resale</h2>
+                            <img src="{{ asset('assets/images/2-removebg-preview.png') }}" class="img-fluid">
                         </span>
                     </div>
                     <!-- Form -->
