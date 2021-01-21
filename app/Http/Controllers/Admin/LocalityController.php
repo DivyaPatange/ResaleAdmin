@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Admin\Locality;
 use App\Models\Admin\State;
 use App\Models\Admin\City;
-use App\Models\Admin\Locality;
 
 class LocalityController extends Controller
 {
@@ -18,8 +18,8 @@ class LocalityController extends Controller
     public function index()
     {
         $localities = Locality::all();
-        $state = State::where('status', 1)->get();
-        return view('admin.locality.index', compact('localities', 'state'));
+        $states = State::where('status', 1)->get();
+        return view('admin.locality.index', compact('localities', 'states'));
     }
 
     /**
@@ -30,6 +30,13 @@ class LocalityController extends Controller
     public function create()
     {
         //
+    }
+
+    public function getCityList(Request $request)
+    {
+        $city = City::where("state_id", $request->state_id)->where('status', 1)
+        ->pluck("city_name","id");
+        return response()->json($city);
     }
 
     /**
@@ -44,14 +51,12 @@ class LocalityController extends Controller
             'state_name' => 'required',
             'city_name' => 'required',
             'locality' => 'required',
-            'status' => 'required',
         ]);
         
         $locality = new Locality();
         $locality->state_id = $request->state_name;
         $locality->city_id = $request->city_name;
         $locality->locality = $request->locality;
-        $locality->status = $request->status;
         $locality->save();
         return redirect('/admin/locality')->with('success', 'Locality Added Successfully');
     }
@@ -87,7 +92,17 @@ class LocalityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $locality = Locality::findorfail($id);
+        $request->validate([
+            'state_name' => 'required',
+            'city_name' => 'required',
+            'locality' => 'required',
+        ]);
+        $locality->state_id = $request->state_name;
+        $locality->city_id = $request->city_name;
+        $locality->locality = $request->locality;
+        $locality->update($request->all());
+        return redirect('/admin/locality')->with('success', 'Locality Updated Successfully');
     }
 
     /**
@@ -98,6 +113,8 @@ class LocalityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $locality = Locality::findorfail($id);
+        $locality->delete();
+        return redirect('/admin/locality')->with('success', 'Locality Deleted Successfully');
     }
 }

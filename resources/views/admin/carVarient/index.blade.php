@@ -42,7 +42,11 @@
                                     <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
                                         <option value="">-Select Category-</option>
                                         @foreach($categories as $c)
+<<<<<<< HEAD
                                         <option value="{{ $c->id }}" @if(old('category_name') == $c->id) selected @endif>{{ $c->category_name }}</option>
+=======
+                                        <option value="{{ $c->id }}">{{ $c->category_name }}</option>
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                         @endforeach
                                     </select>
                                     @error('category_name')
@@ -66,6 +70,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
+<<<<<<< HEAD
                                     <label for="brand_name">Brand Name</label>
                                     <select class="form-control @error('brand_name') is-invalid @enderror" id="brand_name" name="brand_name">
                                     </select>
@@ -90,6 +95,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+=======
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <label for="car_varient">Car Varient</label>
                                     <input type="text" class="form-control @error('car_varient') is-invalid @enderror" id="car_varient" name="car_varient" value="{{ old('car_varient') }}">
                                     @error('car_varient')
@@ -120,8 +127,11 @@
                                     <th>Sr. No.</th>
                                     <th>Category Name</th>
                                     <th>Sub Category</th>
+<<<<<<< HEAD
                                     <th>Brand Name</th>
                                     <th>Model Name</th>
+=======
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <th>Car Varient</th>
                                     <th>Action</th>
                                 </tr>
@@ -143,6 +153,7 @@
                                         @endif
                                         @endif
                                     </td>
+<<<<<<< HEAD
                                     <td>
                                         <?php
                                             $brand = DB::table('brands')->where('id', $s->brand_id)->first();
@@ -155,6 +166,8 @@
                                         ?>
                                         @if(isset($model) && !empty($model)) {{ $model->model_name }} @endif
                                     </td>
+=======
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <td>{{ $s->car_varient }}</td>
                                     <td>
                                         <a href="{{ route('admin.car-varient.edit', $s->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
@@ -173,8 +186,11 @@
                                     <th>Sr. No.</th>
                                     <th>Category Name</th>
                                     <th>Sub Category</th>
+<<<<<<< HEAD
                                     <th>Brand Name</th>
                                     <th>Model Name</th>
+=======
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <th>Car Varient</th>
                                     <th>Action</th>
                                 </tr>
@@ -211,7 +227,11 @@
       success:function(res){        
       if(res){
         $("#sub_category").empty();
+<<<<<<< HEAD
         $("#sub_category").append('<option value="">Select Sub-Category</option>');
+=======
+        $("#sub_category").append('<option>Select Sub-Category</option>');
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
         $.each(res,function(key,value){
           $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
         });
@@ -225,6 +245,7 @@
     $("#sub_category").empty();
   }   
   });
+<<<<<<< HEAD
 
   $('#sub_category').change(function(){
   var sub_categoryID = $(this).val();  
@@ -275,6 +296,8 @@
     $("#model_name").empty();
   }   
   });
+=======
+>>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
 </script>
 @endsection
 @endsection

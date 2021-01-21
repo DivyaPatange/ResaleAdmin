@@ -11,5 +11,5 @@ class Locality extends Model
 
     protected $table = "localities";
 
-    protected $fillable = ['state_id', 'city_id', 'locality', 'status'];
+    protected $fillable = ['state_id', 'city_id', 'locality'];
 }
