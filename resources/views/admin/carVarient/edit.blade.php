@@ -1,11 +1,6 @@
 @extends('admin.admin_layout.main')
-<<<<<<< HEAD
 @section('title', 'Car Varient')
 @section('page_title', 'Car Varient')
-=======
-@section('title', 'Suggestion')
-@section('page_title', 'Suggestion')
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
@@ -76,7 +71,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-<<<<<<< HEAD
                                     <label for="brand_name">Brand Name</label>
                                     
                                     <select class="form-control @error('brand_name') is-invalid @enderror" id="brand_name" name="brand_name">
@@ -109,8 +103,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <label for="car_varient">Car Varient</label>
                                     <input type="text" class="form-control @error('car_varient') is-invalid @enderror" id="car_varient" name="car_varient" value="{{ $carVarient->car_varient }}">
                                     @error('car_varient')
@@ -163,7 +155,6 @@
     $("#sub_category").empty();
   }   
   });
-<<<<<<< HEAD
 
 
   $('#sub_category').change(function(){
@@ -215,8 +206,6 @@
     $("#model_name").empty();
   }   
   });
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
 </script>
 @endsection
 @endsection
