@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\CategoryFormFieldController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\TypeBrandController;
+use App\Http\Controllers\Admin\LocalityController;
+use App\Http\Controllers\Admin\CarVarientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +52,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('/states', StateController::class);
     Route::resource('/city', CityController::class);
     Route::resource('/type-brand', TypeBrandController::class);
+    Route::resource('/locality', LocalityController::class);
+    Route::resource('/car-varient', CarVarientController::class);
+    Route::get('/get-sub-brand-list', [CarVarientController::class, 'getSubBrandList']);
+    Route::get('/get-sub-model-list', [CarVarientController::class, 'getSubModelList']);
 });
