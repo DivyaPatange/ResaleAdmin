@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
+use App\Models\Admin\Brand;
 
 class SubCategoryController extends Controller
 {
@@ -111,5 +112,14 @@ class SubCategoryController extends Controller
         $subCategory = SubCategory::findorfail($id);
         $subCategory->delete();
         return redirect('/admin/sub-category')->with('success', 'Sub-Category Deleted Successfully!');
+    }
+
+    public function getSubCategoryView($cid, $sid)
+    {
+        $category = Category::findorfail($cid);
+        $subCategory = SubCategory::findorfail($sid);
+        $brands = Brand::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
+        // dd($subCategory);
+        return view('admin.getSubCategoryView.index', compact('category', 'subCategory', 'brands'));
     }
 }

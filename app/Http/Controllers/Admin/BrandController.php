@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
+use Redirect;
 
 class BrandController extends Controller
 {
@@ -41,10 +42,8 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'brand_name' => 'required',
             'status' => 'required',
             'category_name' => 'required',
-            'sub_category' => 'required',
         ]);
         $brand = new Brand();
         $brand->brand_name = $request->brand_name;
@@ -52,7 +51,7 @@ class BrandController extends Controller
         $brand->category_id = $request->category_name;
         $brand->sub_category_id = $request->sub_category;
         $brand->save();
-        return redirect('/admin/brands')->with('success', 'Brand Added Successfully!');
+        return Redirect::back()->with('success', 'Brand Added Successfully!');
     }
 
     /**
@@ -114,6 +113,21 @@ class BrandController extends Controller
     {
         $brand = Brand::findorfail($id);
         $brand->delete();
-        return redirect('/admin/brands')->with('success', 'Brand Deleted Successfully!');
+        return Redirect::back()->with('success', 'Brand Deleted Successfully!');
     }
+
+    public function getBrand(Request $request)
+    {
+        $brand = Brand::where('id', $request->bid)->first();
+        if (!empty($brand)) 
+        {
+            $data = array('id' =>$brand->id,'brand_name' =>$brand->brand_name,'status' =>$brand->status
+            );
+        }else{
+            $data =0;
+        }
+        echo json_encode($data);
+        // return $brand;
+    }
+
 }

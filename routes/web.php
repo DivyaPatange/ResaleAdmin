@@ -58,4 +58,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/get-sub-model-list', [CarVarientController::class, 'getSubModelList']);
     Route::get('/get-city-list', [LocalityController::class, 'getCityList']);
     Route::resource('/car-varient', CarVarientController::class);
+    Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView']);
+    Route::post('/get-brand', [BrandController::class, 'getBrand'])->name('get.brand');
 });
