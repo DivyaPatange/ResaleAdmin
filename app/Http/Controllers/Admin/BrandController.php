@@ -86,21 +86,16 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateBrand(Request $request)
     {
-        $brand = Brand::findorfail($id);
-        $request->validate([
-            'brand_name' => 'required',
-            'status' => 'required',
-            'category_name' => 'required',
-            'sub_category' => 'required',
-        ]);
-        $brand->category_id = $request->category_name;
-        $brand->sub_category_id = $request->sub_category;
-        $brand->brand_name = $request->brand_name;
-        $brand->status = $request->status;
-        $brand->update($request->all());
-        return redirect('/admin/brands')->with('success', 'Brand Updated Successfully!');
+        $brand = Brand::where('id', $request->id)->first();
+        $input_data = array (
+            'brand_name' => $request->brand_name,
+            'status' => $request->status,
+        );
+
+        Brand::whereId($brand->id)->update($input_data);
+        return response()->json(['success' => 'Brand Updated Successfully']);
     }
 
     /**
@@ -113,12 +108,12 @@ class BrandController extends Controller
     {
         $brand = Brand::findorfail($id);
         $brand->delete();
-        return Redirect::back()->with('success', 'Brand Deleted Successfully!');
+        return response()->json(['success' => 'Brand Deleted Successfully']);
     }
 
     public function getBrand(Request $request)
     {
-        $brand = Brand::where('id', $request->bid)->first();
+        $brand = Brand::where('id', $request->bid)->where('status', 1)->first();
         if (!empty($brand)) 
         {
             $data = array('id' =>$brand->id,'brand_name' =>$brand->brand_name,'status' =>$brand->status

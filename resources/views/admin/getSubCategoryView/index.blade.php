@@ -3,6 +3,10 @@
 @section('page_title', $subCategory->sub_category)
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 @endsection
 @section('content')
 <!-- ============================================================== -->
@@ -156,24 +160,6 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                @foreach($brands as $key=>$b)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td>{{ $b->brand_name }}</td>
-                                        <td>@if($b->status == 1) Active @else Inactive @endif</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm" onclick="EditModel(this, {{ $b->id }})">Edit</button>
-                                            <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"
-                                            ><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-                                            <form action="{{ route('admin.brands.destroy', $b->id) }}" method="post">
-                                            @method('DELETE')
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Sr. No.</th>
@@ -205,23 +191,37 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">Edit Brand</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
+        <form method="POST" >
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Brand Name</label>
+                    <input type="text" name="brand_name" id="brand_name" class="form-control" value="">
+                </div>
+                <div class="form-group">
+                    <label for="">Status</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+            </div>
         
-        <!-- Modal body -->
-        <div class="modal-body">
-          Modal body..
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+            <input type="hidden" name="id" id="id" value="">
+            <button type="button" class="btn btn-success" id="editBrand" onclick="return checkSubmit()">Update</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
         
       </div>
     </div>
   </div>
+  
 <!-- ============================================================== -->
 <!-- End Container fluid  -->
 <!-- ============================================================== -->
@@ -234,15 +234,34 @@ $.ajaxSetup({
     }
 });
 </script>
+
 <script>
     /****************************************
         *       Basic Table                   *
-        ****************************************/
-    $('#zero_config').DataTable();
+    ****************************************/
+    var SITEURL = '{{ URL::to('/admin/sub-category/')}}';
+    var category_id = '{{ $category->id }}';
+    var sub_category_id = '{{ $subCategory->id }}';
+    $('#zero_config').DataTable({
+         processing: true,
+         serverSide: true,
+         ajax: {
+          url: SITEURL + '/' + category_id+'/'+ sub_category_id,
+          type: 'GET',
+         },
+         columns: [
+                  {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
+                  { data: 'brand_name', name: 'brand_name' },
+                  { data: 'status', name: 'status' },
+                  {data: 'action', name: 'action', orderable: false},
+               ],
+        order: [[0, 'desc']]
+      });
 
     function EditModel(obj,bid)
     {
     var datastring="bid="+bid;
+    // alert(datastring);
     $.ajax({
         type:"POST",
         url:"{{ route('admin.get.brand') }}",
@@ -250,21 +269,81 @@ $.ajaxSetup({
         cache:false,        
         success:function(returndata)
         {
-            DivyaPatange
-            a&*90567
-            console.log(JSON.parse(returndata));
+            // alert(returndata);
           if (returndata!="0") {
             $("#myModal").modal('show');
-            // var json = JSON.parse(returndata);
-            // $("#id").val(json.id);
-            // $(".bal_amt").val(json.bal_amt);
-            // $("#bal_amt_pay").val(json.bal_amt);
+            var json = JSON.parse(returndata);
+            $("#id").val(json.id);
+            $("#brand_name").val(json.brand_name);
+            $("#status").val(json.status);
             // $("#adv_amt").val(json.advance_amt);
             // $("#total_amt").val(json.total_pay);
           }
         }
       });
     }
+
+    function checkSubmit()
+    {
+        var brand_name = $("#brand_name").val();
+        var status = $("#status").val();
+        var id = $("#id").val().trim();
+        if (brand_name=="") {
+            $("#brand_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#brand_err").fadeOut(); }, 3000);
+            $("#brand_name").focus();
+            return false;
+        }
+        if (status=="") {
+            $("#status_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#status_err").fadeOut(); }, 3000);
+            $("#status").focus();
+            return false;
+        }
+        else
+        { 
+            $('#editBrand').attr('disabled',true);
+            var datastring="brand_name="+brand_name+"&status="+status+"&id="+id;
+            // alert(datastring);
+            $.ajax({
+                type:"POST",
+                url:"{{ url('/admin/brand/update') }}",
+                data:datastring,
+                cache:false,        
+                success:function(returndata)
+                {
+                $('#editBrand').attr('disabled',false);
+                $("#myModal").modal('hide');
+                var oTable = $('#zero_config').dataTable(); 
+                oTable.fnDraw(false);
+                toastr.success(returndata.success);
+                
+                // location.reload();
+                // $("#pay").val("");
+                }
+            });
+        }
+    }
+
+    $('body').on('click', '#delete-brand', function () {
+  
+  var id = $(this).data("id");
+  
+  if(confirm("Are You sure want to delete !")){
+    $.ajax({
+        type: "delete",
+        url: "{{ url('admin/brands') }}"+'/'+id,
+        success: function (data) {
+        var oTable = $('#zero_config').dataTable(); 
+        oTable.fnDraw(false);
+        toastr.success(data.success);
+        },
+        error: function (data) {
+            console.log('Error:', data);
+        }
+    });
+  }
+}); 
 </script>
 @endsection
 @endsection

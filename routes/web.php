@@ -60,4 +60,5 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('/car-varient', CarVarientController::class);
     Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView']);
     Route::post('/get-brand', [BrandController::class, 'getBrand'])->name('get.brand');
+    Route::post('/brand/update', [BrandController::class, 'updateBrand']);
 });

@@ -120,6 +120,19 @@ class SubCategoryController extends Controller
         $subCategory = SubCategory::findorfail($sid);
         $brands = Brand::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
         // dd($subCategory);
+        if(request()->ajax()) {
+            return datatables()->of(Brand::select('*'))
+            ->addColumn('status', function($row){
+                if($row->status == 1)
+                return 'Active';
+                else
+                return 'Inactive';
+            })
+            ->addColumn('action', 'admin.brand.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
         return view('admin.getSubCategoryView.index', compact('category', 'subCategory', 'brands'));
     }
 }
