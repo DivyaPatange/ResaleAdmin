@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
 use App\Models\Admin\Brand;
+use App\Models\Admin\ModelName;
 
 class SubCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -114,13 +119,15 @@ class SubCategoryController extends Controller
         return redirect('/admin/sub-category')->with('success', 'Sub-Category Deleted Successfully!');
     }
 
-    public function getSubCategoryView($cid, $sid)
+    public function getSubCategoryView($cid, $sid, Request $request)
     {
         $category = Category::findorfail($cid);
         $subCategory = SubCategory::findorfail($sid);
         $brands = Brand::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
+        $models = ModelName::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
         // dd($subCategory);
         if(request()->ajax()) {
+            if($request->brand == "brand"){
             return datatables()->of(Brand::select('*'))
             ->addColumn('status', function($row){
                 if($row->status == 1)
@@ -133,6 +140,23 @@ class SubCategoryController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
+        }
+        // if(request()->ajax()) {
+        //     return datatables()->of(ModelName::select('*'))
+        //     ->addColumn('brand_name', function($row){
+        //         return $row->model_name->course_name;
+        //     })
+        //     ->addColumn('status', function($row){
+        //         if($row->status == 1)
+        //         return 'Active';
+        //         else
+        //         return 'Inactive';
+        //     })
+        //     ->addColumn('action', '')
+        //     ->rawColumns(['action'])
+        //     ->addIndexColumn()
+        //     ->make(true);
+        // }
         return view('admin.getSubCategoryView.index', compact('category', 'subCategory', 'brands'));
     }
 }

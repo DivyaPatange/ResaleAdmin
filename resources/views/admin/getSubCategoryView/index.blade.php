@@ -146,16 +146,82 @@
                     </form>
                 </div>
             </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+        <div class="row">
             <div class="col-md-12">
+                <div class="card">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.model-name.store') }}">
+                        @csrf
+                        <div class="card-body">
+                            <h4 class="card-title">Add Model</h4>
+                            <div class="row">
+                                <input type="hidden" name="category_name" value="{{ $category->id }}">
+                                <input type="hidden" name="sub_category" value="{{ $subCategory->id }}">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label for="fname">Brand Name</label>
+                                        <select class="form-control @error('brand_name') is-invalid @enderror" id="fname" name="brand_name">
+                                            <option value="">-Select Brand-</option>
+                                            @foreach($brands as $ba)
+                                            <option value="{{ $ba->id }}">{{ $ba->brand_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('brand_name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label for="fname">Model Name</label>
+                                        <input class="form-control @error('brand_name') is-invalid @enderror" id="fname" name="model_name" placeholder="Model Name" value="{{ old('model_name') }}">
+                                        @error('model_name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lname">Status</label>
+                                        <select type="text" class="form-control @error('status') is-invalid @enderror" id="lname" name="status">
+                                            <option value="">-Select Status-</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        @error('status')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-top">
+                            <div class="card-body">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Brand List</h5>
                         <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered">
+                            <table id="zero_config1" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Sr. No.</th>
                                         <th>Brand Name</th>
+                                        <th>Model Name</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -164,6 +230,7 @@
                                     <tr>
                                         <th>Sr. No.</th>
                                         <th>Brand Name</th>
+                                        <th>Model Name</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -173,13 +240,15 @@
 
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
       </div>
-      <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
       <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
     </div>
   </div>
+</div>
+<div class="row">
+@yield('list')
 </div>
     <!-- ============================================================== -->
 </div>
@@ -242,16 +311,35 @@ $.ajaxSetup({
     var SITEURL = '{{ URL::to('/admin/sub-category/')}}';
     var category_id = '{{ $category->id }}';
     var sub_category_id = '{{ $subCategory->id }}';
+    // var brand = "brand";
+    // alert(brand);
     $('#zero_config').DataTable({
          processing: true,
          serverSide: true,
          ajax: {
-          url: SITEURL + '/' + category_id+'/'+ sub_category_id,
+          url: "{{ url('admin/getBrands') }}"+'/'+category_id+'/'+sub_category_id,
           type: 'GET',
          },
          columns: [
                   {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
                   { data: 'brand_name', name: 'brand_name' },
+                  { data: 'status', name: 'status' },
+                  {data: 'action', name: 'action', orderable: false},
+               ],
+        order: [[0, 'desc']]
+      });
+
+      $('#zero_config1').DataTable({
+         processing: true,
+         serverSide: true,
+         ajax: {
+          url: "{{ url('admin/getModels') }}"+'/'+category_id+'/'+sub_category_id,
+          type: 'GET',
+         },
+         columns: [
+                  {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
+                  { data: 'brand_name', name: 'brand_name' },
+                  { data: 'model_name', name: 'model_name' },
                   { data: 'status', name: 'status' },
                   {data: 'action', name: 'action', orderable: false},
                ],

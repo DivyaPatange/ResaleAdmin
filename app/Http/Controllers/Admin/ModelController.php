@@ -8,9 +8,14 @@ use App\Models\Admin\ModelName;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
+use Redirect;
 
 class ModelController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -63,7 +68,7 @@ class ModelController extends Controller
         $model->model_name = $request->model_name;
         $model->status = $request->status;
         $model->save();
-        return redirect('/admin/model-name')->with('success', 'Model Name Added Successfully!');
+        return Redirect::back()->with('success', 'Model Name Added Successfully!');
     }
 
     /**

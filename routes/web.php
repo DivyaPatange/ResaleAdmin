@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\TypeBrandController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\CarVarientController;
+use App\Http\Controllers\Admin\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+    Route::resource('/users', UsersController::class);
     Route::resource('/category', CategoryController::class);
     Route::resource('/sub-category', SubCategoryController::class);
     Route::resource('/suggestion', SuggestionController::class);
@@ -61,4 +63,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView']);
     Route::post('/get-brand', [BrandController::class, 'getBrand'])->name('get.brand');
     Route::post('/brand/update', [BrandController::class, 'updateBrand']);
+    Route::get('/getBrand/{cid}/{sid}', [BrandController::class, 'getDatatableBrand']);
+    Route::get('/getModels/{cid}/{sid}', [ModelController::class, 'getDatatableModel']);
 });

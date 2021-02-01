@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Admin\State;
+use App\Models\Admin;
 
-class StateController extends Controller
+class UsersController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +15,8 @@ class StateController extends Controller
      */
     public function index()
     {
-        $states = State::all();
-        return view('admin.state.index', compact('states'));
+        $users = Admin::where('acc_type', '=', 'admin')->get();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -41,15 +37,7 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'state_name' => 'required',
-            'status' => 'required',
-        ]);
-        $state = new State();
-        $state->state_name = $request->state_name;
-        $state->status = $request->status;
-        $state->save();
-        return redirect('/admin/states')->with('success', 'State Added Successfully!');
+        //
     }
 
     /**
@@ -71,8 +59,7 @@ class StateController extends Controller
      */
     public function edit($id)
     {
-        $state = State::findorfail($id);
-        return view('admin.state.edit', compact('state'));
+        //
     }
 
     /**
@@ -84,15 +71,7 @@ class StateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $state = State::findorfail($id);
-        $request->validate([
-            'state_name' => 'required',
-            'status' => 'required',
-        ]);
-        $state->state_name = $request->state_name;
-        $state->status = $request->status;
-        $state->update($request->all());
-        return redirect('/admin/states')->with('success', 'State Updated Successfully!'); 
+        //
     }
 
     /**
@@ -103,8 +82,6 @@ class StateController extends Controller
      */
     public function destroy($id)
     {
-        $state = State::findorfail($id);
-        $state->delete();
-        return redirect('/admin/states')->with('success', 'State Deleted Successfully!');
+        //
     }
 }

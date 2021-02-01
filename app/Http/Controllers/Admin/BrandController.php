@@ -11,6 +11,10 @@ use Redirect;
 
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -123,6 +127,28 @@ class BrandController extends Controller
         }
         echo json_encode($data);
         // return $brand;
+    }
+
+    public function getDatatableBrand($cid, $sid)
+    {
+        $category = Category::findorfail($cid);
+        // dd($category);
+        $subCategory = SubCategory::findorfail($sid);
+        $brands = Brand::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
+        if(request()->ajax()) {
+            return datatables()->of(Brand::select('*'))
+            ->addColumn('status', function($row){
+                if($row->status == 1)
+                return 'Active';
+                else
+                return 'Inactive';
+            })
+            ->addColumn('action', 'admin.brand.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin.getSubCategoryView.list', compact('category', 'subCategory'));
     }
 
 }
