@@ -102,7 +102,7 @@
                                 @foreach($categories as $key => $c)
                                 <tr>
                                     <td>{{ ++$key }}</td>
-                                    <td><img src="{{  URL::asset('categoryIcon/' . $c->category_icon) }}" alt=""></td>
+                                    <td><img src="{{  URL::asset('categoryIcon/' . $c->category_icon) }}" alt="" width="32px"></td>
                                     <td>{{ $c->category_name }}</td>
                                     <td>@if($c->status == 1) Active @else Inactive @endif</td>
                                     <td>

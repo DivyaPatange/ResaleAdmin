@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminRoleTable extends Migration
+class AddRoleAccessColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateAdminRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_role', function (Blueprint $table) {
-            $table->id();
-            $table->integer('role_id')->unsigned();
-            $table->integer('admin_id')->unsigned();
-            $table->timestamps();
+        Schema::table('admins', function($table){
+            $table->string('acc_type');
+            $table->string('role_access');
         });
     }
 
@@ -28,6 +26,9 @@ class CreateAdminRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_role');
+        Schema::table('admins', function($table){
+            $table->dropColumn('acc_type');
+            $table->dropColumn('role_access');
+        });
     }
 }
