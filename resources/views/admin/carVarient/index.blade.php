@@ -1,10 +1,5 @@
-@extends('admin.admin_layout.main')
-@section('title', 'Car Varient')
-@section('page_title', 'Car Varient')
-@section('customcss')
-<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-@endsection
-@section('content')
+@extends('admin.getSubCategoryView.index')
+@section('list')
 <!-- ============================================================== -->
 <!-- Container fluid  -->
 <!-- ============================================================== -->
@@ -12,7 +7,7 @@
     <!-- ============================================================== -->
     <!-- Sales Cards  -->
     <!-- ============================================================== -->
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-md-12">
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-block mt-3">
@@ -31,48 +26,18 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{{ route('admin.car-varient.store') }}">
-                    @csrf
+                <form class="form-horizontal" method="POST" id="carVarientSubmit">
                     <div class="card-body">
                         <h4 class="card-title">Add Car Varient</h4>
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group ">
-                                    <label for="category_name">Category</label>
-                                    <select class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name">
-                                        <option value="">-Select Category-</option>
-                                        @foreach($categories as $c)
-<<<<<<< HEAD
-                                        <option value="{{ $c->id }}" @if(old('category_name') == $c->id) selected @endif>{{ $c->category_name }}</option>
-=======
-                                        <option value="{{ $c->id }}">{{ $c->category_name }}</option>
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
-                                        @endforeach
-                                    </select>
-                                    @error('category_name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="sub_category">Sub-Category</label>
-                                    <select class="form-control @error('sub_category') is-invalid @enderror" id="sub_category" name="sub_category">
-                                    </select>
-                                    @error('sub_category')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-<<<<<<< HEAD
-                                    <label for="brand_name">Brand Name</label>
+                                    <label for="brand_name">Brand Name<span style="color:red;">*</span></label><span  style="color:red" id="brand_err"> </span>
                                     <select class="form-control @error('brand_name') is-invalid @enderror" id="brand_name" name="brand_name">
+                                        <option value="">-Select Brand Name-</option>
+                                        @foreach($brands as $b)
+                                        <option value="{{ $b->id }}">{{ $b->brand_name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('brand_name')
                                         <span class="invalid-feedback" role="alert">
@@ -81,9 +46,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="model_name">Model Name</label>
+                                    <label for="model_name">Model Name<span style="color:red;">*</span></label><span  style="color:red" id="model_err"> </span>
                                     <select class="form-control @error('model_name') is-invalid @enderror" id="model_name" name="model_name">
                                     </select>
                                     @error('model_name')
@@ -93,11 +58,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
-                                    <label for="car_varient">Car Varient</label>
+                                    <label for="car_varient">Car Varient<span style="color:red;">*</span></label><span  style="color:red" id="car_varient_err"> </span>
                                     <input type="text" class="form-control @error('car_varient') is-invalid @enderror" id="car_varient" name="car_varient" value="{{ old('car_varient') }}">
                                     @error('car_varient')
                                         <span class="invalid-feedback" role="alert">
@@ -110,7 +73,9 @@
                     </div>
                     <div class="border-top">
                         <div class="card-body">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <input type="hidden" id="category_id" value="{{ $category->id }}">
+                            <input type="hidden" id="sub_category_id" value="{{ $subCategory->id }}">
+                            <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -125,72 +90,19 @@
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Category Name</th>
-                                    <th>Sub Category</th>
-<<<<<<< HEAD
                                     <th>Brand Name</th>
                                     <th>Model Name</th>
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <th>Car Varient</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($carVarient as $key => $s)
-                                <tr>
-                                    <td>{{ ++$key }}</td>
-                                    <?php
-                                        $category = DB::table('categories')->where('id', $s->category_id)->first();
-                                        if(!empty($category))
-                                        {
-                                            $subCategory = DB::table('sub_categories')->where('id', $s->sub_category_id)->first();
-                                        }
-                                    ?>
-                                    <td>@if(isset($category) && !empty($category)) {{ $category->category_name }} @endif</td>
-                                    <td>@if(isset($category) && !empty($category)) 
-                                        @if(isset($subCategory) && !empty($subCategory)){{ $subCategory->sub_category }}
-                                        @endif
-                                        @endif
-                                    </td>
-<<<<<<< HEAD
-                                    <td>
-                                        <?php
-                                            $brand = DB::table('brands')->where('id', $s->brand_id)->first();
-                                        ?>
-                                        @if(isset($brand) && !empty($brand)) {{ $brand->brand_name }} @endif
-                                    </td>
-                                    <td>
-                                        <?php
-                                            $model = DB::table('models')->where('id', $s->model_id)->first();
-                                        ?>
-                                        @if(isset($model) && !empty($model)) {{ $model->model_name }} @endif
-                                    </td>
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
-                                    <td>{{ $s->car_varient }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.car-varient.edit', $s->id) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
-                                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"
-                                        ><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-                                        <form action="{{ route('admin.car-varient.destroy', $s->id) }}" method="post">
-                                        @method('DELETE')
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    </form>
-                                    </td>
-                                </tr>
-                            @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Category Name</th>
-                                    <th>Sub Category</th>
-<<<<<<< HEAD
                                     <th>Brand Name</th>
                                     <th>Model Name</th>
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
                                     <th>Car Varient</th>
                                     <th>Action</th>
                                 </tr>
@@ -206,73 +118,229 @@
 </div>
 <!-- ============================================================== -->
 <!-- End Container fluid  -->
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Car Varient</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="POST" >
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Brand Name <span style="color:red;">*</span></label><span  style="color:red" id="edit_brand_err"> </span>
+                    <select name="brand_name" id="edit_brand_name" class="form-control">
+                        <option value="">-Select Brand Name-</option>
+                        @foreach($brands as $b)
+                        <option value="{{ $b->id }}">{{ $b->brand_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Model Name <span style="color:red;">*</span></label><span  style="color:red" id="edit_model_err"> </span>
+                    <select name="model_name" id="edit_model_name" class="form-control">
+                        @foreach($models as $m)
+                        <option value="{{ $m->id }}">{{ $m->model_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Car Varient <span style="color:red;">*</span></label><span  style="color:red" id="edit_car_varient_err"> </span>
+                    <input type="text" name="car_varient" id="edit_car_varient" class="form-control" value="">
+                </div>
+            </div>
+        
+            <!-- Modal footer -->
+            <div class="modal-footer">
+            <input type="hidden" name="id" id="id" value="">
+            <button type="button" class="btn btn-success" id="editCarVarient" onclick="return checkSubmit()">Update</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+        
+      </div>
+    </div>
+</div>
+
 <!-- ============================================================== -->
 @section('customjs')
 <script src="{{ asset('assets/extra-libs/DataTables/datatables.min.js') }}"></script>
+
+<script src="{{ asset('assets/extra-libs/DataTables/datatables.min.js') }}"></script>
 <script>
-    /****************************************
-        *       Basic Table                   *
-        ****************************************/
-    $('#zero_config').DataTable();
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 </script>
-
 <script type=text/javascript>
-  $('#category_name').change(function(){
-  var categoryID = $(this).val();  
-//   alert(categoryID);
-  if(categoryID){
-    $.ajax({
-      type:"GET",
-      url:"{{url('/admin/get-subcategory-list')}}?category_id="+categoryID,
-      success:function(res){        
-      if(res){
-        $("#sub_category").empty();
-<<<<<<< HEAD
-        $("#sub_category").append('<option value="">Select Sub-Category</option>');
-=======
-        $("#sub_category").append('<option>Select Sub-Category</option>');
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
-        $.each(res,function(key,value){
-          $("#sub_category").append('<option value="'+key+'">'+value+'</option>');
-        });
-      
-      }else{
-        $("#sub_category").empty();
-      }
-      }
-    });
-  }else{
-    $("#sub_category").empty();
-  }   
-  });
-<<<<<<< HEAD
+  var SITEURL = '{{ URL::to('/admin/subCategory/car-varient')}}';
+    var sub_category_id = '{{ $subCategory->id }}';
+    $('#zero_config').DataTable({
+         processing: true,
+         serverSide: true,
+         ajax: {
+          url: SITEURL+'/'+sub_category_id,
+          type: 'GET',
+         },
+         columns: [
+                  {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
+                  { data: 'brand_id', name: 'brand_id' },
+                  { data: 'model_id', name: 'model_id' },
+                  { data: 'car_varient', name: 'car_varient' },
+                  {data: 'action', name: 'action', orderable: false},
+               ],
+        order: [[0, 'desc']]
+      });
 
-  $('#sub_category').change(function(){
-  var sub_categoryID = $(this).val();  
-//   alert(categoryID);
-  if(sub_categoryID){
-    $.ajax({
-      type:"GET",
-      url:"{{url('/admin/get-sub-brand-list')}}?sub_category_id="+sub_categoryID,
-      success:function(res){        
-      if(res){
-        $("#brand_name").empty();
-        $("#brand_name").append('<option value="">-Select Brand-</option>');
-        $.each(res,function(key,value){
-          $("#brand_name").append('<option value="'+key+'">'+value+'</option>');
+    function EditModel(obj,bid)
+    {
+        var datastring="bid="+bid;
+        // alert(datastring);
+        $.ajax({
+            type:"POST",
+            url:"{{ route('admin.get.car-varient') }}",
+            data:datastring,
+            cache:false,        
+            success:function(returndata)
+            {
+                // alert(returndata);
+            if (returndata!="0") {
+                $("#myModal").modal('show');
+                var json = JSON.parse(returndata);
+                $("#id").val(json.id);
+                $("#edit_brand_name").val(json.brand_id);
+                $("#edit_model_name").val(json.model_id);
+                $("#edit_car_varient").val(json.car_varient);
+                // $("#adv_amt").val(json.advance_amt);
+                // $("#total_amt").val(json.total_pay);
+            }
+            }
         });
-      
-      }else{
-        $("#brand_name").empty();
-      }
-      }
-    });
-  }else{
-    $("#brand_name").empty();
-  }   
-  });
+    }
+    function checkSubmit()
+    {
+        var brand_name = $("#edit_brand_name").val();
+        var model_name = $("#edit_model_name").val();
+        var car_varient = $("#edit_car_varient").val();
+        var id = $("#id").val().trim();
+        // console.log(brand_name=="");
+        if (brand_name=="") {
+            $("#edit_brand_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#edit_brand_err").fadeOut(); }, 3000);
+            $("#edit_brand_name").focus();
+            return false;
+        }
+        if (model_name=="") {
+            $("#edit_model_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#edit_model_err").fadeOut(); }, 3000);
+            $("#edit_model_name").focus();
+            return false;
+        }
+        if (car_varient=="") {
+            $("#edit_car_varient_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#edit_car_varient_err").fadeOut(); }, 3000);
+            $("#edit_car_varient").focus();
+            return false;
+        }
+        else
+        { 
+            $('#editCarVarient').attr('disabled',true);
+            var datastring="brand_name="+brand_name+"&car_varient="+car_varient+"&id="+id+"&model_name="+model_name;
+            // alert(datastring);
+            $.ajax({
+                type:"POST",
+                url:"{{ url('/admin/car-varient/update') }}",
+                data:datastring,
+                cache:false,        
+                success:function(returndata)
+                {
+                $('#editCarVarient').attr('disabled',false);
+                $("#myModal").modal('hide');
+                var oTable = $('#zero_config').dataTable(); 
+                oTable.fnDraw(false);
+                toastr.success(returndata.success);
+                
+                // location.reload();
+                // $("#pay").val("");
+                }
+            });
+        }
+    }
 
-  $('#brand_name').change(function(){
+    $('body').on('click', '#delete-carVarient', function () {
+        var id = $(this).data("id");
+  
+        if(confirm("Are You sure want to delete !")){
+            $.ajax({
+                type: "delete",
+                url: "{{ url('admin/car-varient') }}"+'/'+id,
+                success: function (data) {
+                var oTable = $('#zero_config').dataTable(); 
+                oTable.fnDraw(false);
+                toastr.success(data.success);
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        }
+    });
+
+    $('body').on('click', '#submitForm', function () {
+        var brand_name = $("#brand_name").val();
+        var model_name = $("#model_name").val();
+        var car_varient = $("#car_varient").val();
+        var category_id = $("#category_id").val().trim();
+        var sub_category_id = $("#sub_category_id").val().trim();
+        if (brand_name=="") {
+            $("#brand_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#brand_err").fadeOut(); }, 3000);
+            $("#brand_name").focus();
+            return false;
+        }
+        if (model_name=="") {
+            $("#model_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#model_err").fadeOut(); }, 3000);
+            $("#model_name").focus();
+            return false;
+        }
+        if (car_varient=="") {
+            $("#car_varient_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#car_varient_err").fadeOut(); }, 3000);
+            $("#car_varient").focus();
+            return false;
+        }
+        else
+        { 
+            var datastring="brand_name="+brand_name+"&car_varient="+car_varient+"&category_id="+category_id+"&sub_category_id="+sub_category_id+"&model_name="+model_name;
+            // alert(datastring);
+            $.ajax({
+                type:"POST",
+                url:"{{ route('admin.car-varient.store') }}",
+                data:datastring,
+                cache:false,        
+                success:function(returndata)
+                {
+                    document.getElementById("carVarientSubmit").reset();
+                var oTable = $('#zero_config').dataTable(); 
+                oTable.fnDraw(false);
+                toastr.success(returndata.success);
+                
+                // location.reload();
+                // $("#pay").val("");
+                }
+            });
+        }
+    })
+</script>
+<script type=text/javascript>
+$('#brand_name').change(function(){
   var brandID = $(this).val();  
 //   alert(categoryID);
   if(brandID){
@@ -296,8 +364,31 @@
     $("#model_name").empty();
   }   
   });
-=======
->>>>>>> 8a027b219c7f805469efc4057fe2f3bdafb00b53
+
+  $('#edit_brand_name').change(function(){
+  var brandID = $(this).val();  
+//   alert(categoryID);
+  if(brandID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('/admin/get-sub-model-list')}}?brand_id="+brandID,
+      success:function(res){        
+      if(res){
+        $("#edit_model_name").empty();
+        $("#edit_model_name").append('<option value="">-Select Model-</option>');
+        $.each(res,function(key,value){
+          $("#edit_model_name").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#edit_model_name").empty();
+      }
+      }
+    });
+  }else{
+    $("#edit_model_name").empty();
+  }   
+  });
 </script>
 @endsection
 @endsection

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\TypeBrand;
 use App\Models\Admin\Type;
+use App\Models\Admin\Category;
+use App\Models\Admin\SubCategory;
 
 class TypeBrandController extends Controller
 {
@@ -43,17 +45,14 @@ class TypeBrandController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'type_name' => 'required',
-            'brand_name' => 'required',
-            'status' => 'required',
-        ]);
         $typeBrand = new TypeBrand();
         $typeBrand->type_id = $request->type_name;
         $typeBrand->type_brand_name = $request->brand_name;
+        $typeBrand->category_id = $request->category_id;
+        $typeBrand->sub_category_id = $request->sub_category_id;
         $typeBrand->status = $request->status;
         $typeBrand->save();
-        return redirect('/admin/type-brand')->with('success', 'Brand added Successfully!');
+        return response()->json(['success' => 'Record Added Successfully']);
     }
 
     /**
@@ -112,6 +111,61 @@ class TypeBrandController extends Controller
     {
         $typeBrand = TypeBrand::findorfail($id);
         $typeBrand->delete();
-        return redirect('/admin/type-brand')->with('success', 'Brand Deleted Successfully!');
+        return response()->json(['success' => 'Record Deleted Successfully']);
+    }
+
+    public function subCategoryTypeBrand($id)
+    {
+        $subCategory = SubCategory::findorfail($id);
+        $category = Category::where('id', $subCategory->category_id)->first();
+        $type = Type::where('category_id', $category->id)->where('sub_category_id', $id)->where('status', 1)->get();
+        $typeBrand = TypeBrand::where('category_id', $category->id)->where('sub_category_id', $id)->orderBy('id', 'DESC')->get();
+        // dd($type);
+        if(request()->ajax()) {
+            return datatables()->of($typeBrand)
+            ->addColumn('type_id', function(TypeBrand $typeBrand){
+                if(!empty($typeBrand->types->type_name)){
+                return $typeBrand->types->type_name;
+            }
+            })
+            ->addColumn('status', function($row){
+                if($row->status == 1)
+                return 'Active';
+                else
+                return 'Inactive';
+            })
+            ->addColumn('action', 'admin.typeBrand.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin.typeBrand.index', compact('subCategory', 'category', 'type'));
+    }
+
+    public function getTypeBrand(Request $request)
+    {
+        $typeBrand = TypeBrand::where('id', $request->bid)->first();
+        if (!empty($typeBrand)) 
+        {
+            $data = array('id' =>$typeBrand->id,'brand_name' =>$typeBrand->type_brand_name,'status' =>$typeBrand->status, 'type_name' => $typeBrand->type_id
+            );
+        }else{
+            $data =0;
+        }
+        echo json_encode($data);
+    }
+
+    public function updateTypeBrand(Request $request)
+    {
+        $typeBrand = TypeBrand::where('id', $request->id)->first();
+        $input_data = array (
+            'type_id' => $request->type_name,
+            'type_brand_name' => $request->brand_name,
+            'status' => $request->status,
+        );
+
+        TypeBrand::whereId($typeBrand->id)->update($input_data);
+        return response()->json(['success' => 'Record Updated Successfully']);
     }
 }
+

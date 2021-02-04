@@ -12,4 +12,8 @@ class Type extends Model
     protected $table = "types";
 
     protected $fillable = ['type_name', 'status', 'category_id', 'sub_category_id'];
+
+    public function type_brand(){
+        return $this->hasMany('App\Models\Admin\TypeBrand','type_id', 'id');
+    }
 }

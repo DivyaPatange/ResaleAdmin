@@ -46,21 +46,14 @@ class CarVarientController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'category_name' => 'required',
-            'sub_category' => 'required',
-            'car_varient' => 'required',
-            'brand_name' => 'required',
-            'model_name' => 'required',
-        ]);
         $carVarient = new CarVarient();
-        $carVarient->category_id = $request->category_name;
-        $carVarient->sub_category_id = $request->sub_category;
+        $carVarient->category_id = $request->category_id;
+        $carVarient->sub_category_id = $request->sub_category_id;
         $carVarient->brand_id = $request->brand_name;
         $carVarient->model_id = $request->model_name;
         $carVarient->car_varient = $request->car_varient;
         $carVarient->save();
-        return redirect('/admin/car-varient')->with('success', 'Car Varient Added Successfully!');
+        return response()->json(['success' => 'Car Varient Added Successfully']);
     }
 
     /**
@@ -126,7 +119,7 @@ class CarVarientController extends Controller
     {
         $carVarient = CarVarient::findorfail($id);
         $carVarient->delete();
-        return redirect('/admin/car-varient')->with('success', 'Car Varient Deleted Successfully!');
+        return response()->json(['success' => 'Car Varient Deleted Successfully']);
     }
 
     public function getSubBrandList(Request $request)
@@ -141,5 +134,58 @@ class CarVarientController extends Controller
         $model = ModelName::where("brand_id", $request->brand_id)->where('status', 1)
         ->pluck("model_name","id");
         return response()->json($model);
+    }
+
+    public function subCategoryCarVarient($id)
+    {
+        $subCategory = SubCategory::findorfail($id);
+        $category = Category::where('id', $subCategory->category_id)->first();
+        $brands = Brand::where('category_id', $category->id)->where('sub_category_id', $id)->where('status', 1)->get();
+        $models = ModelName::where('category_id', $category->id)->where('sub_category_id', $id)->where('status', 1)->get();
+        $carVarient = CarVarient::where('category_id', $category->id)->where('sub_category_id', $id)->orderBy('id', 'DESC')->get();
+        if(request()->ajax()) {
+            return datatables()->of($carVarient)
+            ->addColumn('brand_id', function(CarVarient $carVarient){
+                if(!empty($carVarient->brands->brand_name)){
+                return $carVarient->brands->brand_name;
+                }
+            })
+            ->addColumn('model_id', function(CarVarient $carVarient){
+                if(!empty($carVarient->model_name->model_name)){
+                    return $carVarient->model_name->model_name;
+                    }
+            })
+            ->addColumn('action', 'admin.carVarient.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin.carVarient.index', compact('subCategory', 'category', 'brands', 'models'));
+    }
+
+    public function getCarVarient(Request $request)
+    {
+        $carVarient = CarVarient::where('id', $request->bid)->first();
+        if (!empty($carVarient)) 
+        {
+            $data = array('id' =>$carVarient->id,'brand_id' =>$carVarient->brand_id,'model_id' =>$carVarient->model_id, 'car_varient' => $carVarient->car_varient
+            );
+        }else{
+            $data =0;
+        }
+        echo json_encode($data);
+    }
+
+    public function updateCarVarient(Request $request)
+    {
+        $carVarient = CarVarient::where('id', $request->id)->first();
+        $input_data = array (
+            'brand_id' => $request->brand_name,
+            'model_id' => $request->model_name,
+            'car_varient' => $request->car_varient,
+        );
+
+        CarVarient::whereId($carVarient->id)->update($input_data);
+        return response()->json(['success' => 'Car Varient Updated Successfully']);
     }
 }

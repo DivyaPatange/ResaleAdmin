@@ -44,19 +44,13 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'category_name' => 'required',
-            'sub_category' => 'required',
-            'type_name' => 'required',
-            'status' => 'required',
-        ]);
         $type = new Type();
-        $type->category_id = $request->category_name;
-        $type->sub_category_id = $request->sub_category;
+        $type->category_id = $request->category_id;
+        $type->sub_category_id = $request->sub_category_id;
         $type->type_name = $request->type_name;
         $type->status = $request->status;
         $type->save();
-        return redirect('/admin/types')->with('success', 'Type Added Successfully!');
+        return response()->json(['success' => 'Record Added Successfully']);
     }
 
     /**
@@ -118,6 +112,52 @@ class TypeController extends Controller
     {
         $type = Type::findorfail($id);
         $type->delete();
-        return redirect('/admin/types')->with('success', 'Type Deleted Successfully!');
+        return response()->json(['success' => 'Record Deleted Successfully']);
+    }
+
+    public function subCategoryType($id)
+    {
+        $subCategory = SubCategory::findorfail($id);
+        $category = Category::where('id', $subCategory->category_id)->first();
+        $type = Type::where('category_id', $category->id)->where('sub_category_id', $id)->orderBy('id', 'DESC')->get();
+        if(request()->ajax()) {
+            return datatables()->of($type)
+            ->addColumn('status', function($row){
+                if($row->status == 1)
+                return 'Active';
+                else
+                return 'Inactive';
+            })
+            ->addColumn('action', 'admin.type.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin.type.index', compact('subCategory', 'category'));
+    }
+
+    public function getType(Request $request)
+    {
+        $type = Type::where('id', $request->bid)->first();
+        if (!empty($type)) 
+        {
+            $data = array('id' =>$type->id,'type_name' =>$type->type_name,'status' =>$type->status
+            );
+        }else{
+            $data =0;
+        }
+        echo json_encode($data);
+    }
+
+    public function updateType(Request $request)
+    {
+        $type = Type::where('id', $request->id)->first();
+        $input_data = array (
+            'type_name' => $request->type_name,
+            'status' => $request->status,
+        );
+
+        Type::whereId($type->id)->update($input_data);
+        return response()->json(['success' => 'Data Updated Successfully']);
     }
 }

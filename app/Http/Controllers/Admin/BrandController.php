@@ -45,17 +45,13 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'status' => 'required',
-            'category_name' => 'required',
-        ]);
         $brand = new Brand();
         $brand->brand_name = $request->brand_name;
         $brand->status = $request->status;
-        $brand->category_id = $request->category_name;
-        $brand->sub_category_id = $request->sub_category;
+        $brand->category_id = $request->category_id;
+        $brand->sub_category_id = $request->sub_category_id;
         $brand->save();
-        return Redirect::back()->with('success', 'Brand Added Successfully!');
+        return response()->json(['success' => 'Brand Added Successfully']);
     }
 
     /**
@@ -117,7 +113,7 @@ class BrandController extends Controller
 
     public function getBrand(Request $request)
     {
-        $brand = Brand::where('id', $request->bid)->where('status', 1)->first();
+        $brand = Brand::where('id', $request->bid)->first();
         if (!empty($brand)) 
         {
             $data = array('id' =>$brand->id,'brand_name' =>$brand->brand_name,'status' =>$brand->status
@@ -129,14 +125,15 @@ class BrandController extends Controller
         // return $brand;
     }
 
-    public function getDatatableBrand($cid, $sid)
+    public function subCategoryBrand($id)
     {
-        $category = Category::findorfail($cid);
+        // dd($id);
+        $subCategory = SubCategory::findorfail($id);
+        $category = Category::where('id', $subCategory->category_id)->first();
         // dd($category);
-        $subCategory = SubCategory::findorfail($sid);
-        $brands = Brand::where('category_id', $cid)->where('sub_category_id', $sid)->where('status', 1)->get();
+        $brands = Brand::where('category_id', $category->id)->where('sub_category_id', $id)->orderBy('id', 'DESC')->get();
         if(request()->ajax()) {
-            return datatables()->of(Brand::select('*'))
+            return datatables()->of($brands)
             ->addColumn('status', function($row){
                 if($row->status == 1)
                 return 'Active';
@@ -148,7 +145,8 @@ class BrandController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('admin.getSubCategoryView.list', compact('category', 'subCategory'));
+        return view('admin.brand.index', compact('subCategory', 'category'));
     }
+
 
 }

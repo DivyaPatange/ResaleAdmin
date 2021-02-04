@@ -157,6 +157,6 @@ class SubCategoryController extends Controller
         //     ->addIndexColumn()
         //     ->make(true);
         // }
-        return view('admin.getSubCategoryView.index', compact('category', 'subCategory', 'brands'));
+        return view('admin.getSubCategoryView.index', compact('category', 'subCategory'));
     }
 }

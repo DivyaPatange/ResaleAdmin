@@ -54,21 +54,14 @@ class ModelController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'category_name' => 'required',
-            'sub_category' => 'required',
-            'brand_name' => 'required',
-            'model_name' => 'required',
-            'status' => 'required',
-        ]);
         $model = new ModelName();
-        $model->category_id = $request->category_name;
-        $model->sub_category_id = $request->sub_category;
+        $model->category_id = $request->category_id;
+        $model->sub_category_id = $request->sub_category_id;
         $model->brand_id = $request->brand_name;
         $model->model_name = $request->model_name;
         $model->status = $request->status;
         $model->save();
-        return Redirect::back()->with('success', 'Model Name Added Successfully!');
+        return response()->json(['success' => 'Model Added Successfully']);
     }
 
     /**
@@ -133,6 +126,60 @@ class ModelController extends Controller
     {
         $model = ModelName::findorfail($id);
         $model->delete();
-        return redirect('/admin/model-name')->with('success', 'Model Name Deleted Successfully!');
+        return response()->json(['success' => 'Model Deleted Successfully']);
+    }
+
+    public function getModel(Request $request)
+    {
+        $model = ModelName::where('id', $request->bid)->first();
+        if (!empty($model)) 
+        {
+            $data = array('id' =>$model->id,'brand_name' =>$model->brand_id,'status' =>$model->status, 'model_name' => $model->model_name
+            );
+        }else{
+            $data =0;
+        }
+        echo json_encode($data);
+    }
+
+    public function updateModel(Request $request)
+    {
+        $model = ModelName::where('id', $request->id)->first();
+        $input_data = array (
+            'brand_id' => $request->brand_name,
+            'model_name' => $request->model_name,
+            'status' => $request->status,
+        );
+
+        ModelName::whereId($model->id)->update($input_data);
+        return response()->json(['success' => 'Model Updated Successfully']);
+    }
+
+    public function subCategoryModel($id)
+    {
+        $subCategory = SubCategory::findorfail($id);
+        $category = Category::where('id', $subCategory->category_id)->first();
+        // dd($subCategory);
+        $brands = Brand::where('category_id', $category->id)->where('sub_category_id', $id)->where('status', 1)->get();
+        $models = ModelName::where('category_id', $category->id)->where('sub_category_id', $id)->orderBy('id', 'DESC')->get();
+        if(request()->ajax()) {
+            return datatables()->of($models)
+            ->addColumn('brand_id', function(ModelName $modelName){
+                if(!empty($modelName->brands->brand_name)){
+                return $modelName->brands->brand_name;
+            }
+            })
+            ->addColumn('status', function($row){
+                if($row->status == 1)
+                return 'Active';
+                else
+                return 'Inactive';
+            })
+            ->addColumn('action', 'admin.model.action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin.model.index', compact('subCategory', 'category', 'brands'));
     }
 }

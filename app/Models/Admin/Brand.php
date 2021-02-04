@@ -14,6 +14,10 @@ class Brand extends Model
     protected $fillable = ['brand_name', 'status', 'category_id', 'sub_category_id'];
 
     public function model_name(){
-        return $this->belongsTo('App\Models\Admin\ModelName','brand_name', 'id');
+        return $this->hasMany('App\Models\Admin\ModelName','brand_id', 'id');
+    }
+
+    public function car_varient(){
+        return $this->hasMany('App\Models\Admin\CarVarient','brand_id', 'id');
     }
 }

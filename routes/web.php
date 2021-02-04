@@ -61,8 +61,28 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/get-city-list', [LocalityController::class, 'getCityList']);
     Route::resource('/car-varient', CarVarientController::class);
     Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView']);
+    // sub-category brand route
     Route::post('/get-brand', [BrandController::class, 'getBrand'])->name('get.brand');
     Route::post('/brand/update', [BrandController::class, 'updateBrand']);
-    Route::get('/getBrand/{cid}/{sid}', [BrandController::class, 'getDatatableBrand']);
-    Route::get('/getModels/{cid}/{sid}', [ModelController::class, 'getDatatableModel']);
+    Route::get('/subCategory/brand/{id}', [BrandController::class, 'subCategoryBrand'])->name('brand');
+
+    // sub-category model route
+    Route::get('/subCategory/model/{id}', [ModelController::class, 'subCategoryModel'])->name('model');
+    Route::post('/get-model', [ModelController::class, 'getModel'])->name('get.model');
+    Route::post('/model/update', [ModelController::class, 'updateModel']);
+
+    // sub-category car varient route
+    Route::get('/subCategory/car-varient/{id}', [CarVarientController::class, 'subCategoryCarVarient'])->name('car-varient');
+    Route::post('/get-car-varient', [CarVarientController::class, 'getCarVarient'])->name('get.car-varient');
+    Route::post('/car-varient/update', [CarVarientController::class, 'updateCarVarient']);
+
+    // sub-category type route
+    Route::get('/subCategory/type/{id}', [TypeController::class, 'subCategoryType'])->name('type');
+    Route::post('/get-type', [TypeController::class, 'getType'])->name('get.type');
+    Route::post('/type/update', [TypeController::class, 'updateType']);
+
+    // sub-category type brand route
+    Route::get('/subCategory/type-brand/{id}', [TypeBrandController::class, 'subCategoryTypeBrand'])->name('type-brand');
+    Route::post('/get-type-brand', [TypeBrandController::class, 'getTypeBrand'])->name('get.type-brand');
+    Route::post('/type-brand/update', [TypeBrandController::class, 'updateTypeBrand']);
 });
