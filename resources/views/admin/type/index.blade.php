@@ -28,11 +28,11 @@
             <div class="card">
                 <form class="form-horizontal" method="POST" id="typeSubmit">
                     <div class="card-body">
-                        <h4 class="card-title">Add Vehicle Type</h4>
+                        <h4 class="card-title">Add Type</h4>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <label for="fname">Vehicle Type Name<span style="color:red;">*</span></label><span  style="color:red" id="type_err"> </span>
+                                    <label for="fname">Type Name<span style="color:red;">*</span></label><span  style="color:red" id="type_err"> </span>
                                     <input type="text" class="form-control @error('type_name') is-invalid @enderror" id="type_name" placeholder="Type Name" name="type_name" >
                                     @error('type_name')
                                         <span class="invalid-feedback" role="alert">
@@ -71,7 +71,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Vehicle Type List</h5>
+                    <h5 class="card-title">Type List</h5>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
@@ -109,7 +109,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Edit Vehicle Type</h4>
+          <h4 class="modal-title">Edit Type</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form method="POST" >

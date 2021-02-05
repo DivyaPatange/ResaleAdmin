@@ -91,14 +91,28 @@
     </div> -->
     <div class="row">
         <div class="col-md-12">
-            @if($subCategory->sub_category == "Cars")
+            @if(($subCategory->sub_category == "Cars") || ($subCategory->sub_category == "Spare Parts - Accessories") || ($subCategory->sub_category == "Mobile Phones") || ($subCategory->sub_category == "Motorcycles") || ($subCategory->sub_category == "Scooters"))
             <a href="{{ route('admin.brand', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Brand</button></a>
+            @endif
+            @if(($subCategory->sub_category == "Cars") || ($subCategory->sub_category == "Spare Parts - Accessories") || ($subCategory->sub_category == "Mobile Phones") || ($subCategory->sub_category == "Motorcycles") || ($subCategory->sub_category == "Scooters"))
             <a href="{{ route('admin.model', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Model</button></a>
+            @endif
+            @if(($subCategory->sub_category == "Cars") || ($subCategory->sub_category == "Spare Parts - Accessories"))
             <a href="{{ route('admin.car-varient', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Car Varient</button></a>
-            @elseif($subCategory->sub_category == "Commercial Vehicles")
+            @endif
+            @if($subCategory->sub_category == "Commercial Vehicles")
             <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Vehicle Type</button></a>
+            @endif
+            @if($subCategory->sub_category == "Accessories")
+            <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Accessory Type</button></a>
+            @endif
+            @if(($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "Spare Parts") || ($subCategory->sub_category == "TV / LCD / LED Audio to Video"))
+            <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Type</button></a>
+            @endif
+            @if(($subCategory->sub_category == "Commercial Vehicles") || ($subCategory->sub_category == "Accessories") || ($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "TV / LCD / LED Audio to Video"))
             <a href="{{ route('admin.type-brand', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Brand</button></a>
             @endif
+            
         </div>
     </div>
     <div class="row">
