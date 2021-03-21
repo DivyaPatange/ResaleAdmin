@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\TypeBrandController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\CarVarientController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SubRoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,4 +87,16 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/subCategory/type-brand/{id}', [TypeBrandController::class, 'subCategoryTypeBrand'])->name('type-brand');
     Route::post('/get-type-brand', [TypeBrandController::class, 'getTypeBrand'])->name('get.type-brand');
     Route::post('/type-brand/update', [TypeBrandController::class, 'updateTypeBrand']);
+
+    // Role Route
+    Route::resource('/role', RoleController::class);
+    Route::get('/subCategory/role/{id}', [RoleController::class, 'subCategoryRole'])->name('role');
+    Route::post('/get-role', [RoleController::class, 'getRole'])->name('get.role');
+    Route::post('/role/update', [RoleController::class, 'updateRole']);
+
+    // Sub Role Route
+    Route::resource('/subrole', SubRoleController::class);
+    Route::get('/subCategory/subrole/{id}', [SubRoleController::class, 'subCategorySubrole'])->name('subrole');
+    Route::post('/get-subrole', [SubRoleController::class, 'getSubrole'])->name('get.subrole');
+    Route::post('/subrole/update', [SubRoleController::class, 'updateSubrole']);
 });
