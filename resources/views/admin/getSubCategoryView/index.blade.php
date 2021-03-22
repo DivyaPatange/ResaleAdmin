@@ -109,6 +109,14 @@
             @if(($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "Spare Parts") || ($subCategory->sub_category == "TV / LCD / LED Audio to Video"))
             <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Type</button></a>
             @endif
+            @if(($subCategory->sub_category == "Part time Jobs") || ($subCategory->sub_category == "Full Time Jobs") || ($subCategory->sub_category == "Internship") || ($subCategory->sub_category == "Freelancer") || ($subCategory->sub_category == "Work Abroad") || ($subCategory->sub_category == "Contract Jobs"))
+            <a href="{{ route('admin.role', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Role</button></a>
+            
+            @endif
+            @if(($subCategory->sub_category == "Part time Jobs") || ($subCategory->sub_category == "Full Time Jobs") || ($subCategory->sub_category == "Internship") || ($subCategory->sub_category == "Freelancer") || ($subCategory->sub_category == "Work Abroad") || ($subCategory->sub_category == "Contract Jobs"))
+            <a href="{{ route('admin.subrole', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Sub Role</button></a>
+            
+            @endif
             @if(($subCategory->sub_category == "Commercial Vehicles") || ($subCategory->sub_category == "Accessories") || ($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "TV / LCD / LED Audio to Video"))
             <a href="{{ route('admin.type-brand', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Brand</button></a>
             @endif
