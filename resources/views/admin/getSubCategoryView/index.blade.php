@@ -112,6 +112,9 @@
             @if(($subCategory->sub_category == "Commercial Vehicles") || ($subCategory->sub_category == "Accessories") || ($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "TV / LCD / LED Audio to Video"))
             <a href="{{ route('admin.type-brand', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Brand</button></a>
             @endif
+            @if(($subCategory->sub_category == "Property for Rent / Lease") || ($subCategory->sub_category == "Property for Sale"))
+            <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Property Type</button></a>
+            @endif
             
         </div>
     </div>

@@ -256,7 +256,7 @@ $.ajaxSetup({
             });
         }
     });
-
+    
     $('body').on('click', '#submitForm', function () {
         var brand_name = $("#brand_name").val();
         var status = $("#status").val();
