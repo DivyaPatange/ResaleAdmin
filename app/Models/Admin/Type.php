@@ -16,4 +16,8 @@ class Type extends Model
     public function type_brand(){
         return $this->hasMany('App\Models\Admin\TypeBrand','type_id', 'id');
     }
+
+    public function type_size(){
+        return $this->hasMany('App\Models\Admin\Size','type_id', 'id');
+    }
 }

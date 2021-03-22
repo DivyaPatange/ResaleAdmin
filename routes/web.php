@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\CarVarientController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubRoleController;
+use App\Http\Controllers\Admin\SizeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/subCategory/role/{id}', [RoleController::class, 'subCategoryRole'])->name('role');
     Route::post('/get-role', [RoleController::class, 'getRole'])->name('get.role');
     Route::post('/role/update', [RoleController::class, 'updateRole']);
+
+     // Size Route
+     Route::resource('/size', SizeController::class);
+     Route::get('/subCategory/size/{id}', [SizeController::class, 'subCategorySize'])->name('size');
+     Route::post('/get-size', [SizeController::class, 'getSize'])->name('get.size');
+     Route::post('/size/update', [SizeController::class, 'updateSize']);
 
     // Sub Role Route
     Route::resource('/subrole', SubRoleController::class);
