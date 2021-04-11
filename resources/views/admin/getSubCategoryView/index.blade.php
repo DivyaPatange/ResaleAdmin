@@ -128,17 +128,259 @@
             <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Property Type</button></a>
             @endif
 
-            @if(($subCategory->sub_category == "Men") || ($subCategory->sub_category == "Women") ($subCategory->sub_category == "Kids"))
+            @if(($subCategory->sub_category == "Men") || ($subCategory->sub_category == "Women") || ($subCategory->sub_category == "Kids"))
             <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Clothing Type</button></a>
             @endif
-            @if(($subCategory->sub_category == "Men") || ($subCategory->sub_category == "Women") ($subCategory->sub_category == "Kids"))
+            @if(($subCategory->sub_category == "Men") || ($subCategory->sub_category == "Women") || ($subCategory->sub_category == "Kids"))
             <a href="{{ route('admin.size', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Clothing Size</button></a>
             @endif
         </div>
     </div>
-    <div class="row">
-        @yield('list')
-    </div>
+    @if($subCategory->sub_category == "Cars")
+        <?php 
+            $cars = DB::table('cars')->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($cars as $c)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $c->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $c->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewCarPost', $c->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteCarPost', $c->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+    @if($subCategory->sub_category == "Commercial Vehicles")
+        <?php 
+            $commercialVehicle = DB::table('commercial_vehicles')->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($commercialVehicle as $com)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $com->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $com->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewComVehiclePost', $com->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteComVehiclePost', $com->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if($subCategory->sub_category == "Spare Parts - Accessories")
+        <?php 
+            $spareParts = DB::table('spare_parts')->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($spareParts as $sparePart)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $sparePart->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $sparePart->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewSparePartPost', $sparePart->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteSparePartPost', $sparePart->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+    @if($subCategory->sub_category == "Mobile Phones")
+        <?php 
+            $mobilePhone = DB::table('mobile_phones')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($mobilePhone as $moPhone)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $moPhone->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $moPhone->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewMobilePhonePost', $moPhone->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteMobilePhonePost', $moPhone->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if($subCategory->sub_category == "Accessories")
+        <?php 
+            $accessories = DB::table('mobile_accessories')->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($accessories as $a)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $a->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $a->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center" style="height:210px">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewMobileAccessoryPost', $a->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteMobileAccessoryPost', $a->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if($subCategory->sub_category == "Tablets")
+        <?php 
+            $tablets = DB::table('mobile_tablets')->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($tablets as $t)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $t->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $t->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center" style="height:210px">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewMobileTabletPost', $t->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteMobileTabletPost', $t->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if($subCategory->sub_category == "Apple")
+        <?php 
+            $mobilePhone = DB::table('mobile_phones')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($mobilePhone as $moPhone)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $moPhone->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $moPhone->ad_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewMobilePhonePost', $moPhone->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteMobilePhonePost', $moPhone->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if(($subCategory->sub_category == "Part time Jobs") || ($subCategory->sub_category == "Full Time Jobs") || ($subCategory->sub_category == "Internship") || ($subCategory->sub_category == "Freelancer") || ($subCategory->sub_category == "Work Abroad") || ($subCategory->sub_category == "Contract Jobs"))
+        <?php 
+            $jobs = DB::table('jobs')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($jobs as $job)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $job->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $job->job_title }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewJobPost', $job->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deleteJobPost', $job->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endif
     <!-- ============================================================== -->
 </div>
 

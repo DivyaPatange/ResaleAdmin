@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubRoleController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\DeletePostController;
+use App\Http\Controllers\Admin\ViewPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/get-sub-model-list', [CarVarientController::class, 'getSubModelList']);
     Route::get('/get-city-list', [LocalityController::class, 'getCityList']);
     Route::resource('/car-varient', CarVarientController::class);
-    Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView']);
+    Route::get('/sub-category/{cid}/{sid}', [SubCategoryController::class, 'getSubCategoryView'])->name('subCategoryView');
     // sub-category brand route
     Route::post('/get-brand', [BrandController::class, 'getBrand'])->name('get.brand');
     Route::post('/brand/update', [BrandController::class, 'updateBrand']);
@@ -106,4 +108,23 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/subCategory/subrole/{id}', [SubRoleController::class, 'subCategorySubrole'])->name('subrole');
     Route::post('/get-subrole', [SubRoleController::class, 'getSubrole'])->name('get.subrole');
     Route::post('/subrole/update', [SubRoleController::class, 'updateSubrole']);
+
+    // Delete Post Route
+    Route::delete('/deleteCarPost/{id}', [DeletePostController::class, 'deleteCarPost'])->name('deleteCarPost');
+    Route::delete('/deleteComVehiclePost/{id}', [DeletePostController::class, 'deleteComVehiclePost'])->name('deleteComVehiclePost');
+    Route::delete('/deleteSparePartPost/{id}', [DeletePostController::class, 'deleteSparePartPost'])->name('deleteSparePartPost');
+    Route::delete('/deleteMobilePhonePost/{id}', [DeletePostController::class, 'deleteMobilePhonePost'])->name('deleteMobilePhonePost');
+    Route::delete('/deleteMobileAccessoryPost/{id}', [DeletePostController::class, 'deleteMobileAccessoryPost'])->name('deleteMobileAccessoryPost');
+    Route::delete('/deleteMobileTabletPost/{id}', [DeletePostController::class, 'deleteMobileTabletPost'])->name('deleteMobileTabletPost');
+    Route::delete('/deleteJobPost/{id}', [DeletePostController::class, 'deleteJobPost'])->name('deleteJobPost');
+
+    // View Post Route
+    Route::get('/viewCarPost/{id}', [ViewPostController::class, 'viewCarPost'])->name('viewCarPost');
+    Route::get('/viewCommercialVehiclePost/{id}', [ViewPostController::class, 'viewComVehiclePost'])->name('viewComVehiclePost');
+    Route::get('/viewSparePartPost/{id}', [ViewPostController::class, 'viewSparePartPost'])->name('viewSparePartPost');
+    Route::get('/viewMobilePhonePost/{id}', [ViewPostController::class, 'viewMobilePhonePost'])->name('viewMobilePhonePost');
+    Route::get('/viewMobileAccessoryPost/{id}', [ViewPostController::class, 'viewMobileAccessoryPost'])->name('viewMobileAccessoryPost');
+    Route::get('/viewMobileTabletPost/{id}', [ViewPostController::class, 'viewMobileTabletPost'])->name('viewMobileTabletPost');
+    Route::get('/viewJobPost/{id}', [ViewPostController::class, 'viewJobPost'])->name('viewJobPost');
+
 });
