@@ -11,6 +11,12 @@ use App\Models\Admin\MobilePhone;
 use App\Models\Admin\MobileAccessory;
 use App\Models\Admin\MobileTablet;
 use App\Models\Admin\Job;
+use App\Models\Admin\Bike;
+use App\Models\Admin\TV;
+use App\Models\Admin\Furniture;
+use App\Models\Admin\Education;
+use App\Models\Admin\Pet;
+use App\Models\Admin\Fashion;
 
 class ViewPostController extends Controller
 {
@@ -60,5 +66,41 @@ class ViewPostController extends Controller
     {
         $singlePost = Job::findorfail($id);
         return view('admin.view-post.job', compact('singlePost'));
+    }
+
+    public function viewBikePost($id)
+    {
+        $singlePost = Bike::findorfail($id);
+        return view('admin.view-post.bike', compact('singlePost'));
+    }
+
+    public function viewElectronicPost($id)
+    {
+        $singlePost = TV::findorfail($id);
+        return view('admin.view-post.electronic', compact('singlePost'));
+    }
+
+    public function viewFurniturePost($id)
+    {
+        $singlePost = Furniture::findorfail($id);
+        return view('admin.view-post.furniture', compact('singlePost'));
+    }
+
+    public function viewFashionPost($id)
+    {
+        $singlePost = Fashion::findorfail($id);
+        return view('admin.view-post.fashion', compact('singlePost'));
+    }
+
+    public function viewEducationPost($id)
+    {
+        $singlePost = Education::findorfail($id);
+        return view('admin.view-post.education', compact('singlePost'));
+    }
+
+    public function viewPetPost($id)
+    {
+        $singlePost = Pet::findorfail($id);
+        return view('admin.view-post.pet', compact('singlePost'));
     }
 }

@@ -159,4 +159,10 @@ class SubCategoryController extends Controller
         // }
         return view('admin.getSubCategoryView.index', compact('category', 'subCategory'));
     }
+
+    public function displayAd($id)
+    {
+        $subCategory = SubCategory::findorfail($id);
+        return view('admin.getSubCategoryView.displayAd', compact('subCategory'));
+    }
 }

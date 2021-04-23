@@ -13,6 +13,12 @@ use App\Models\Admin\MobilePhone;
 use App\Models\Admin\MobileAccessory;
 use App\Models\Admin\MobileTablet;
 use App\Models\Admin\Job;
+use App\Models\Admin\Bike;
+use App\Models\Admin\TV;
+use App\Models\Admin\Furniture;
+use App\Models\Admin\Education;
+use App\Models\Admin\Pet;
+use App\Models\Admin\Fashion;
 
 class DeletePostController extends Controller
 {
@@ -89,4 +95,58 @@ class DeletePostController extends Controller
         $job->delete();
         return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
     }
+
+    public function deleteBikePost($id)
+    {
+        $bike = Bike::findorfail($id);
+        $cid = $bike->category_id;
+        $sid = $bike->sub_category_id;
+        $bike->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+
+    public function deleteElectronicPost($id)
+    {
+        $tv = TV::findorfail($id);
+        $cid = $tv->category_id;
+        $sid = $tv->sub_category_id;
+        $tv->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+
+    public function deleteFurniturePost($id)
+    {
+        $furniture = Furniture::findorfail($id);
+        $cid = $furniture->category_id;
+        $sid = $furniture->sub_category_id;
+        $furniture->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+
+    public function deleteFashionPost($id)
+    {
+        $fashion = Fashion::findorfail($id);
+        $cid = $fashion->category_id;
+        $sid = $fashion->sub_category_id;
+        $fashion->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+
+    public function deleteEducationPost($id)
+    {
+        $education = Education::findorfail($id);
+        $cid = $education->category_id;
+        $sid = $education->sub_category_id;
+        $education->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+    public function deletePetPost($id)
+    {
+        $pet = Pet::findorfail($id);
+        $cid = $pet->category_id;
+        $sid = $pet->sub_category_id;
+        $pet->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+    
 }

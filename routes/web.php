@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\SubRoleController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\DeletePostController;
 use App\Http\Controllers\Admin\ViewPostController;
+use App\Http\Controllers\Admin\RateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::delete('/deleteMobileAccessoryPost/{id}', [DeletePostController::class, 'deleteMobileAccessoryPost'])->name('deleteMobileAccessoryPost');
     Route::delete('/deleteMobileTabletPost/{id}', [DeletePostController::class, 'deleteMobileTabletPost'])->name('deleteMobileTabletPost');
     Route::delete('/deleteJobPost/{id}', [DeletePostController::class, 'deleteJobPost'])->name('deleteJobPost');
+    Route::delete('/deleteBikePost/{id}', [DeletePostController::class, 'deleteBikePost'])->name('deleteBikePost');
+    Route::delete('/deleteElectronicPost/{id}', [DeletePostController::class, 'deleteElectronicPost'])->name('deleteElectronicPost');
+    Route::delete('/deleteFurniturePost/{id}', [DeletePostController::class, 'deleteFurniturePost'])->name('deleteFurniturePost');
+    Route::delete('/deleteFashionPost/{id}', [DeletePostController::class, 'deleteFashionPost'])->name('deleteFashionPost');
+    Route::delete('/deleteEducationPost/{id}', [DeletePostController::class, 'deleteEducationPost'])->name('deleteEducationPost');
+    Route::delete('/deletePetPost/{id}', [DeletePostController::class, 'deletePetPost'])->name('deletePetPost');
 
     // View Post Route
     Route::get('/viewCarPost/{id}', [ViewPostController::class, 'viewCarPost'])->name('viewCarPost');
@@ -126,5 +133,14 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/viewMobileAccessoryPost/{id}', [ViewPostController::class, 'viewMobileAccessoryPost'])->name('viewMobileAccessoryPost');
     Route::get('/viewMobileTabletPost/{id}', [ViewPostController::class, 'viewMobileTabletPost'])->name('viewMobileTabletPost');
     Route::get('/viewJobPost/{id}', [ViewPostController::class, 'viewJobPost'])->name('viewJobPost');
+    Route::get('/viewBikePost/{id}', [ViewPostController::class, 'viewBikePost'])->name('viewBikePost');
+    Route::get('/viewElectronicPost/{id}', [ViewPostController::class, 'viewElectronicPost'])->name('viewElectronicPost');
+    Route::get('/viewFurniturePost/{id}', [ViewPostController::class, 'viewFurniturePost'])->name('viewFurniturePost');
+    Route::get('/viewFashionPost/{id}', [ViewPostController::class, 'viewFashionPost'])->name('viewFashionPost');
+    Route::get('/viewEducationPost/{id}', [ViewPostController::class, 'viewEducationPost'])->name('viewEducationPost');
+    Route::get('/viewPetPost/{id}', [ViewPostController::class, 'viewPetPost'])->name('viewPetPost');
 
+    Route::get('/display-ad/{id}', [SubCategoryController::class, 'displayAd'])->name('display-ad');
+
+    Route::resource('/rate-card', RateController::class);
 });

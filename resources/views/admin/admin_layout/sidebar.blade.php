@@ -34,6 +34,7 @@
                 @if(in_array("Locality", $explodeRole))
                 <li class="sidebar-item"><a href="{{ route('admin.locality.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Locality </span></a></li>
                 @endif
+                <li class="sidebar-item"><a href="{{ route('admin.rate-card.index') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Rate Card </span></a></li>
             </ul>
         </li>
         <?php
