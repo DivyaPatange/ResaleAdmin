@@ -4,6 +4,9 @@
 @section('customcss')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <script src="https://use.fontawesome.com/d5c7b56460.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <style>
 td.details-control:before {
     font-family: 'FontAwesome';
@@ -33,13 +36,13 @@ tr.shown td.details-control:before{
         <div class="col-md-12">
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-block mt-3">
-                <button type="button" class="close" data-dismiss="alert">×</button>	
+                <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $message }}</strong>
             </div>
             @endif
             @if ($message = Session::get('danger'))
             <div class="alert alert-danger alert-block mt-3">
-                <button type="button" class="close" data-dismiss="alert">×</button>	
+                <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $message }}</strong>
             </div>
             @endif
@@ -59,10 +62,12 @@ tr.shown td.details-control:before{
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th>Category</th>
                                     <th>Title</th>
                                     <th>Rate Price</th>
+                                    <th>Discount (in %)</th>
+                                    <th>Discount Rate</th>
                                     <th>Duration</th>
-                                    <th>Benefits</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,10 +76,12 @@ tr.shown td.details-control:before{
                             <tfoot>
                                 <tr>
                                     <th></th>
+                                    <th>Category</th>
                                     <th>Title</th>
                                     <th>Rate Price</th>
+                                    <th>Discount (in %)</th>
+                                    <th>Discount Rate</th>
                                     <th>Duration</th>
-                                    <th>Benefits</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -95,14 +102,27 @@ tr.shown td.details-control:before{
     /****************************************
         *       Basic Table                   *
         ****************************************/
-    $('#zero_config').DataTable();
+    // $('#zero_config').DataTable();
 </script>
 
 <script type=text/javascript>
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 var SITEURL = '{{ route('admin.rate-card.index')}}';
 function format ( d ) {
     // `d` is the original data object for the row
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">'+
+        '<tr>'+
+            '<td style="text-align:center">Ad Quantity</td>'+
+            '<td style="text-align:center">'+d.quantity+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td style="text-align:center">Benefits</td>'+
+            '<td style="text-align:center">'+d.benefits+'</td>'+
+        '</tr>'+
         '<tr>'+
             '<td style="text-align:center">Action</td>'+
             '<td style="text-align:center">'+d.action+'</td>'+
@@ -125,10 +145,12 @@ $(document).ready(function() {
                 "data":           null,
                 "defaultContent": ''
             },
+            { data: 'category_id', name: 'category_id' },
             { data: 'title', name: 'title' },
             { data: 'rate_price', name: 'rate_price' },
+            { data: 'discount_per', name: 'discount_per' },
+            { data: 'discount_rate', name: 'discount_rate' },
             { data: 'duration', name: 'duration' },
-            { data: 'benefits', name: 'benefits' },
         ],
     order: [[0, 'desc']]
     });
@@ -157,7 +179,8 @@ $('body').on('click', '#delete', function () {
             type: "delete",
             url: "{{ url('admin/rate-card') }}"+'/'+id,
             success: function (data) {
-            var oTable = $('#dataTableHover').dataTable(); 
+                // alert(data);
+            var oTable = $('#zero_config').dataTable(); 
             oTable.fnDraw(false);
             toastr.success(data.success);
             },

@@ -11,5 +11,5 @@ class RateCard extends Model
 
     protected $table = "rate_cards";
 
-    protected $fillable = ['title', 'rate_price', 'duration'];
+    protected $fillable = ['category_id', 'title', 'rate_price', 'discount_per', 'discount_rate', 'quantity', 'duration'];
 }

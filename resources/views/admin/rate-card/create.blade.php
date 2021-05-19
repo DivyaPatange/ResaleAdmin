@@ -41,14 +41,43 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group ">
+                                    <label for="title">Ad Category</label><span class="text-danger" id="cat_err"></span>
+                                    <select name="category" id="category" class="form-control">
+                                        <option value="">Select Category</option>
+                                        @foreach($categories as $c)
+                                        <option value="{{ $c->id }}">{{ $c->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
                                     <label for="title">Title</label><span class="text-danger" id="title_err"></span>
                                     <input type="text" name="title" id="title" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="price">Price</label><span class="text-danger" id="price_err"></span>
+                                    <label for="price">Rate Card Rate</label><span class="text-danger" id="price_err"></span>
                                     <input type="number" name="price" id="price" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="price">Discount (in %)</label><span class="text-danger" id="percent_err"></span>
+                                    <input type="number" name="discount_per" id="discount_per" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="price">Discounted Rate</label><span class="text-danger" id="rate_err"></span>
+                                    <input type="number" name="discount_rate" id="discount_rate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="price">Ad Quantity</label><span class="text-danger" id="quantity_err"></span>
+                                    <input type="number" name="quantity" id="quantity" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -57,7 +86,7 @@
                                     <input type="number" class="form-control" id="duration" name="duration">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <span id="benefit_err" class="text-danger"></span>
                                 <div id="inputFormRow">
                                     <div class="input-group mb-3">
@@ -69,7 +98,7 @@
                                 </div>
                                 <div id="newRow"></div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <button id="addRow" type="button" class="btn btn-info">Add Row</button>
                             </div>
                         </div>
@@ -109,10 +138,20 @@
     $('body').on('submit', '.form-horizontal', function (event) {
         event.preventDefault();
         var formdata = new FormData(this);
+        var category = $("#category").val();
         var title = $("#title").val();
         var price = $("#price").val();
+        var discount_per = $("#discount_per").val();
+        var discount_rate = $("#discount_rate").val();
+        var quantity = $("#quantity").val();
         var duration = $("#duration").val();
         var benefit = $("input[id='benefit']").map(function(){return $(this).val();}).get();
+        if (category=="") {
+            $("#cat_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#cat_err").fadeOut(); }, 3000);
+            $("#category").focus();
+            return false;
+        }
         if (title=="") {
             $("#title_err").fadeIn().html("Required");
             setTimeout(function(){ $("#title_err").fadeOut(); }, 3000);
@@ -123,6 +162,24 @@
             $("#price_err").fadeIn().html("Required");
             setTimeout(function(){ $("#price_err").fadeOut(); }, 3000);
             $("#price").focus();
+            return false;
+        }
+        if (discount_per=="") {
+            $("#percent_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#percent_err").fadeOut(); }, 3000);
+            $("#discount_per").focus();
+            return false;
+        }
+        if (discount_rate=="") {
+            $("#rate_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#rate_err").fadeOut(); }, 3000);
+            $("#discount_rate").focus();
+            return false;
+        }
+        if (quantity=="") {
+            $("#quantity_err").fadeIn().html("Required");
+            setTimeout(function(){ $("#quantity_err").fadeOut(); }, 3000);
+            $("#quantity").focus();
             return false;
         }
         if (duration=="") {

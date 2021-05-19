@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\RateCard;
 use App\Models\Admin\RateBenefit;
+use App\Models\Admin\Category;
 
 class RateController extends Controller
 {
@@ -19,6 +20,13 @@ class RateController extends Controller
         $rateCard = RateCard::orderBy('id', 'DESC')->get();
         if(request()->ajax()) {
             return datatables()->of($rateCard)
+            ->addColumn('category_id', function($row){   
+                $category = Category::where('id', $row->category_id)->first();
+                if(!empty($category))
+                {
+                    return $category->category_name;
+                }
+            })
             ->addColumn('benefits', function($row){    
                 $rateBenefit = RateBenefit::where('rate_id', $row->id)->get();
                 $output = "";
@@ -44,7 +52,8 @@ class RateController extends Controller
      */
     public function create()
     {
-        return view('admin.rate-card.create');
+        $categories = Category::where('status', 1)->get();
+        return view('admin.rate-card.create', compact('categories'));
     }
 
     /**
@@ -56,8 +65,12 @@ class RateController extends Controller
     public function store(Request $request)
     {
         $rateCard = new RateCard();
+        $rateCard->category_id = $request->category;
         $rateCard->title = $request->title;
         $rateCard->rate_price = $request->price;
+        $rateCard->discount_per = $request->discount_per;
+        $rateCard->discount_rate = $request->discount_rate;
+        $rateCard->quantity = $request->quantity;
         $rateCard->duration = $request->duration;
         $rateCard->save();
         $benefit = $request->benefit;
