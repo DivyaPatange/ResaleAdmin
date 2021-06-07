@@ -47,6 +47,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     Route::resource('/users', UsersController::class);
+    Route::get('/post-ad-users', [UsersController::class, 'showList'])->name('post-ad-users');
     Route::resource('/category', CategoryController::class);
     Route::resource('/sub-category', SubCategoryController::class);
     Route::resource('/suggestion', SuggestionController::class);

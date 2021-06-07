@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Admin\Category;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -120,4 +121,11 @@ class UsersController extends Controller
         $admin->delete();
         return redirect('/admin/users')->with('success', 'User Deleted Successfully!');
     }
+
+    public function showList()
+    {
+       $users = User::all();
+       return view('admin.users.post-ad-user', compact('users')); 
+    }
 }
+

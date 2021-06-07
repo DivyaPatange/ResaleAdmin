@@ -103,7 +103,10 @@ class RateController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::where('status', 1)->get();
+        $rateCard = RateCard::findorfail($id);
+        $rateB = RateBenefit::where('rate_id', $rateCard->id)->get();
+        return view('admin.rate-card.edit', compact('rateCard', 'rateB', 'categories'));
     }
 
     /**
@@ -115,7 +118,32 @@ class RateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->discount_rate);
+        $input_data = array (
+            'category_id' => $request->category,
+            'title' => $request->title,
+            'rate_price' => $request->price,
+            'discount_per' => $request->discount_per,
+            'discount_rate' => $request->discount_rate,
+            'quantity' => $request->quantity,
+            'duration' => $request->duration,
+        );
+
+        RateCard::whereId($id)->update($input_data);
+        $rateB = RateBenefit::where('rate_id', $id)->get();
+        foreach($rateB as $b)
+        {
+            $b->delete();
+        }
+        $benefit = $request->benefit;
+        for($i=0; $i < count($benefit); $i++)
+        {
+            $rateB = new RateBenefit();
+            $rateB->rate_id = $id;
+            $rateB->benefits = $benefit[$i];
+            $rateB->save();
+        }
+        return redirect('/admin/rate-card')->with('success', 'Rate Card Updated Successfully!');
     }
 
     /**

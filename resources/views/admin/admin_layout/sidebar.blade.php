@@ -9,6 +9,9 @@
         @if(in_array("Users", $explodeRole))
         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ route('admin.users.index') }}" aria-expanded="false"><i class="mdi mdi-alert"></i><span class="hide-menu">Users </span></a></li>
         @endif
+        <li class="sidebar-item"> 
+            <a class="sidebar-link waves-effect waves-dark" href="{{ route('admin.post-ad-users') }}" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">Post Ad User </span></a>
+        </li>
         @if(in_array("Category", $explodeRole))
         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.category.index') }}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Categories</span></a></li>
         @endif
