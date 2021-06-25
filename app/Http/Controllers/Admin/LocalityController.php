@@ -56,12 +56,14 @@ class LocalityController extends Controller
             'city_name' => 'required',
             'locality' => 'required',
         ]);
-        
-        $locality = new Locality();
-        $locality->state_id = $request->state_name;
-        $locality->city_id = $request->city_name;
-        $locality->locality = $request->locality;
-        $locality->save();
+        $explodeLocality = explode(",", $request->locality);
+        for($i=0; $i < count($explodeLocality); $i++){
+            $locality = new Locality();
+            $locality->state_id = $request->state_name;
+            $locality->city_id = $request->city_name;
+            $locality->locality = $explodeLocality[$i];
+            $locality->save();
+        }
         return redirect('/admin/locality')->with('success', 'Locality Added Successfully');
     }
 

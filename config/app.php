@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Yajra\Datatables\DatatablesServiceProvider::class,
+        \Conner\Tagging\Providers\TaggingServiceProvider::class,
         /*
          * Application Service Providers...
          */
