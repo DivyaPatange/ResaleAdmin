@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\DeletePostController;
 use App\Http\Controllers\Admin\ViewPostController;
 use App\Http\Controllers\Admin\RateController;
+use App\Http\Controllers\Admin\BrandModelController;
+use App\Http\Controllers\Admin\CommercialCarVarientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +85,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('/get-car-varient', [CarVarientController::class, 'getCarVarient'])->name('get.car-varient');
     Route::post('/car-varient/update', [CarVarientController::class, 'updateCarVarient']);
 
+    // commercial vehicle car varient route
+    Route::get('/commercial/car-varient/{id}', [CommercialCarVarientController::class, 'commercialCarVarient'])->name('commercial-car-varient');
+    Route::post('/get-commercial-car-varient', [CommercialCarVarientController::class, 'getCommercialCarVarient'])->name('get.commercial-car-varient');
+    Route::post('/commercial-car-varient/update', [CommercialCarVarientController::class, 'updateCommercialCarVarient']);
+    Route::get('/get-brand-model-list', [CommercialCarVarientController::class, 'getBrandModelList']);
+
     // sub-category type route
     Route::get('/subCategory/type/{id}', [TypeController::class, 'subCategoryType'])->name('type');
     Route::post('/get-type', [TypeController::class, 'getType'])->name('get.type');
@@ -110,6 +118,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/subCategory/subrole/{id}', [SubRoleController::class, 'subCategorySubrole'])->name('subrole');
     Route::post('/get-subrole', [SubRoleController::class, 'getSubrole'])->name('get.subrole');
     Route::post('/subrole/update', [SubRoleController::class, 'updateSubrole']);
+
+    // Brand Model Route
+    Route::resource('/brand-model', BrandModelController::class);
+    Route::get('/subCategory/brand-model/{id}', [BrandModelController::class, 'subCategoryBrandModel'])->name('brand-model');
+    Route::post('/get-brand-model', [BrandModelController::class, 'getBrandModel'])->name('get.brand-model');
+    Route::post('/brand-model/update', [BrandModelController::class, 'updateBrandModel']);
 
     // Delete Post Route
     Route::delete('/deleteCarPost/{id}', [DeletePostController::class, 'deleteCarPost'])->name('deleteCarPost');

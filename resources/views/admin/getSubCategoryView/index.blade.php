@@ -124,6 +124,12 @@
             @if(($subCategory->sub_category == "Commercial Vehicles") || ($subCategory->sub_category == "Accessories") || ($subCategory->sub_category == "Tablets") || ($subCategory->sub_category == "Audio / Video / Gaming") || ($subCategory->sub_category == "Home Appliances") || ($subCategory->sub_category == "Computers / Laptops & Accessories") || ($subCategory->sub_category == "Cameras / Lenses / Accessories") || ($subCategory->sub_category == "Kitchen Appliances") || ($subCategory->sub_category == "ACs & Cooler") || ($subCategory->sub_category == "Other Devices") || ($subCategory->sub_category == "Antiques - Handicrafts") || ($subCategory->sub_category == "Furniture for Hospitality") || ($subCategory->sub_category == "Furniture for Industry") || ($subCategory->sub_category == "Furniture for Shop & Showroom") || ($subCategory->sub_category == "Furniture for Office") || ($subCategory->sub_category == "Household Furniture") || ($subCategory->sub_category == "Kitchenware") || ($subCategory->sub_category == "Kids Furniture") || ($subCategory->sub_category == "Paintings") || ($subCategory->sub_category == "Home Decor & Gardening"))
             <a href="{{ route('admin.type-brand', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Brand</button></a>
             @endif
+            @if($subCategory->sub_category == "Commercial Vehicles")
+            <a href="{{ route('admin.brand-model', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Model</button></a>
+            @endif
+            @if($subCategory->sub_category == "Commercial Vehicles")
+            <a href="{{ route('admin.commercial-car-varient', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Car Varient</button></a>
+            @endif
             @if(($subCategory->sub_category == "Property for Rent / Lease") || ($subCategory->sub_category == "Property for Sale"))
             <a href="{{ route('admin.type', $subCategory->id) }}"><button type="button" class="btn btn-primary btn-sm">Property Type</button></a>
             @endif
