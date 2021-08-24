@@ -139,6 +139,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::delete('/deleteFashionPost/{id}', [DeletePostController::class, 'deleteFashionPost'])->name('deleteFashionPost');
     Route::delete('/deleteEducationPost/{id}', [DeletePostController::class, 'deleteEducationPost'])->name('deleteEducationPost');
     Route::delete('/deletePetPost/{id}', [DeletePostController::class, 'deletePetPost'])->name('deletePetPost');
+    Route::delete('/deletePropertyRentPost/{id}', [DeletePostController::class, 'deletePropertyRentPost'])->name('deletePropertyRentPost');
+    Route::delete('/deletePropertySalePost/{id}', [DeletePostController::class, 'deletePropertySalePost'])->name('deletePropertySalePost');
+    Route::delete('/deletePGHousePost/{id}', [DeletePostController::class, 'deletePGHousePost'])->name('deletePGHousePost');
 
     // View Post Route
     Route::get('/viewCarPost/{id}', [ViewPostController::class, 'viewCarPost'])->name('viewCarPost');
@@ -154,6 +157,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/viewFashionPost/{id}', [ViewPostController::class, 'viewFashionPost'])->name('viewFashionPost');
     Route::get('/viewEducationPost/{id}', [ViewPostController::class, 'viewEducationPost'])->name('viewEducationPost');
     Route::get('/viewPetPost/{id}', [ViewPostController::class, 'viewPetPost'])->name('viewPetPost');
+    Route::get('/viewPropertyRentPost/{id}', [ViewPostController::class, 'viewPropertyRentPost'])->name('viewPropertyRentPost');
+    Route::get('/viewPropertySalePost/{id}', [ViewPostController::class, 'viewPropertySalePost'])->name('viewPropertySalePost');
+    Route::get('/viewPGHousePost/{id}', [ViewPostController::class, 'viewPGHousePost'])->name('viewPGHousePost');
 
     Route::get('/display-ad/{id}', [SubCategoryController::class, 'displayAd'])->name('display-ad');
 

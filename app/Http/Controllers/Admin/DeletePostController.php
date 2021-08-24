@@ -19,6 +19,10 @@ use App\Models\Admin\Furniture;
 use App\Models\Admin\Education;
 use App\Models\Admin\Pet;
 use App\Models\Admin\Fashion;
+use App\Models\Admin\PropertyRent;
+use App\Models\Admin\PropertyRentDetail;
+use App\Models\Admin\PropertySale;
+use App\Models\Admin\PGHouse;
 
 class DeletePostController extends Controller
 {
@@ -148,5 +152,35 @@ class DeletePostController extends Controller
         $pet->delete();
         return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
     }
+
+    public function deletePropertyRentPost($id)
+    {
+        $propertyRent = PropertyRent::findorfail($id);
+        $propertyRentDetail = PropertyRentDetail::where('rent_id', $id)->first();
+        $cid = $propertyRent->category_id;
+        $sid = $propertyRent->sub_category_id;
+        $propertyRent->delete();
+        if(!empty($propertyRentDetail)){
+            $propertyRentDetail->delete();
+        }
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
     
+    public function deletePropertySalePost($id)
+    {
+        $propertySale = PropertySale::findorfail($id);
+        $cid = $propertySale->category_id;
+        $sid = $propertySale->sub_category_id;
+        $propertySale->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
+
+    public function deletePGHousePost($id)
+    {
+        $pgHouse = PGHouse::findorfail($id);
+        $cid = $pgHouse->category_id;
+        $sid = $pgHouse->sub_category_id;
+        $pgHouse->delete();
+        return redirect('/admin/sub-category/'.$cid.'/'.$sid)->with('success', 'Post Deleted Successfully');
+    }
 }

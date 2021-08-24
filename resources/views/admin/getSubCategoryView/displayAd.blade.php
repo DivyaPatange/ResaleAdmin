@@ -433,4 +433,94 @@
             @endforeach
         </div>
    @endif
+   @if($subCategory->sub_category == "Property for Rent / Lease")
+        <?php 
+            $propertyRents = DB::table('property_rents')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($propertyRents as $propertyRent)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $propertyRent->exterior_photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $propertyRent->project_name }}</h5>
+                    </div>
+                    <div class="card-body text-center" style="height:200px">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewPropertyRentPost', $propertyRent->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deletePropertyRentPost', $propertyRent->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+   @endif
+   @if($subCategory->sub_category == "Property for Sale")
+        <?php 
+            $propertySales = DB::table('property_sales')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($propertySales as $propertySale)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $propertySale->exterior_photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $propertySale->project_name }}</h5>
+                    </div>
+                    <div class="card-body text-center" style="height:200px">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewPropertySalePost', $propertySale->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deletePropertySalePost', $propertySale->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+   @endif
+   @if($subCategory->sub_category == "PG & Guest Houses")
+        <?php 
+            $pgHouses = DB::table('p_g_houses')->where('sub_category_id', $subCategory->id)->get(); 
+        ?>
+        <div class="row mt-4">
+            @foreach($pgHouses as $pgHouse)
+            <div class="col-md-3">
+            <?php 
+                $explodePhoto = explode(",", $pgHouse->photos);
+            ?>
+                <div class="card">
+                    <div class="card-header" style="height:78px">
+                        <h5 class="card-title mb-2">{{ $pgHouse->pg_name }}</h5>
+                    </div>
+                    <div class="card-body text-center" style="height:200px">
+                        <img src="https://resale99.com/adPhotos/{{ $explodePhoto[0] }}" alt="" style="max-height: 170px; max-width: 100%;">
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('admin.viewPGHousePost', $pgHouse->id) }}"><button type="button" class="btn btn-info btn-sm">View</button>
+                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                        <form action="{{ route('admin.deletePGHousePost', $pgHouse->id) }}" method="post">
+                            @method('DELETE')
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+   @endif
 @endsection

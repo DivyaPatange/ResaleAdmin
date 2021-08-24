@@ -17,6 +17,10 @@ use App\Models\Admin\Furniture;
 use App\Models\Admin\Education;
 use App\Models\Admin\Pet;
 use App\Models\Admin\Fashion;
+use App\Models\Admin\PropertyRent;
+use App\Models\Admin\PropertyRentDetail;
+use App\Models\Admin\PropertySale;
+use App\Models\Admin\PGHouse;
 
 class ViewPostController extends Controller
 {
@@ -102,5 +106,24 @@ class ViewPostController extends Controller
     {
         $singlePost = Pet::findorfail($id);
         return view('admin.view-post.pet', compact('singlePost'));
+    }
+
+    public function viewPropertyRentPost($id)
+    {
+        $singlePost = PropertyRent::findorfail($id);
+        $propertyRentDetail = PropertyRentDetail::where('rent_id', $id)->first();
+        return view('admin.view-post.property-rent', compact('singlePost', 'propertyRentDetail'));
+    }
+
+    public function viewPropertySalePost($id)
+    {
+        $singlePost = PropertySale::findorfail($id);
+        return view('admin.view-post.property-sale', compact('singlePost'));
+    }
+
+    public function viewPGHousePost($id)
+    {
+        $singlePost = PGHouse::findorfail($id);
+        return view('admin.view-post.pg-house', compact('singlePost'));
     }
 }
